@@ -36,9 +36,9 @@
 "<" |
 ">" |{return SYMBOLS;}
 
-(\/\/|##)[[:ascii:]]*\n {return COMMENT;}
+(\/\/|##).*\n {return COMMENT;}
 
-[\s] {return WHITESPACE;}
+[\s\t]+ {return WHITESPACE;}
 
 .	{ yyerror("Mystery character %c\n", *yytext); }
 
