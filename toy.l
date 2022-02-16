@@ -11,12 +11,12 @@
 "then" |
 "else" |
 "for" |
-"return" {return KEYWORD;}
+"return" {printf("KEYWORD\n");}
 
 
-[_a-zA-Z][_a-zA-Z0-9]* {return ID;}
+[_a-zA-Z][_a-zA-Z0-9]* {printf("ID\n");}
 
--?[0-9]+(;|\s) {return INT;}
+-?[1-9][0-9]* {printf("INT\n");}
 
 
 "==" |
@@ -34,12 +34,21 @@
 "." |
 "=" | 
 "<" |
-">" |{return SYMBOLS;}
+">" {printf("SYMBOLS\n");}
 
-(\/\/|##).*\n {return COMMENT;}
+(\/\/|##).*\n {printf("COMMENT\n");}
 
-[\s\t]+ {return WHITESPACE;}
+[ \s\t]+ {printf("WHITESPACE\n");}
 
-.	{ yyerror("Mystery character %c\n", *yytext); }
+.	{ printf("Mystery character %c\n", *yytext); }
+
 
 %% 
+
+int yywrap(){}
+int main(){
+  
+yylex();
+  
+return 0;
+}
