@@ -1,4 +1,12 @@
 
+%{
+  #include <stdio.h>
+
+  int yylex();
+  int yyerror(const char *msg);
+%}
+
+
 %token BOOL TRUE FALSE VOID PRINTF STRUCT IF THEN  ELSE FOR RETURN MOD ID;
 %token AND OR NOT;
 %token INT;
@@ -31,3 +39,13 @@ term: INT
 
 
 %%
+
+main(int argc, char **argv)
+{
+  yyparse();
+}
+
+int yyerror(const char *msg){
+  printf(stderr);
+  return 0;
+}

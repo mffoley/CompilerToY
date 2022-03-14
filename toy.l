@@ -53,15 +53,6 @@
 
 \n            {return EOL;}
 
-.	{ printf("Mystery character %c\n", *yytext); }
 
 
 %% 
-
-int yywrap(){}
-int main(){
-  
-yylex();
-  
-return 0;
-}
