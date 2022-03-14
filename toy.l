@@ -19,11 +19,11 @@
 "return"  {return RETURN;}
 
 
-[_a-zA-Z][_a-zA-Z0-9]* {printf("ID\n");}
+[_a-zA-Z][_a-zA-Z0-9]* {return ID;}
 
--?[1-9][0-9]* {printf("INT\n");}
+-?[1-9][0-9]* {return INT;}
 
-["][^\\"]*["] {printf("STRING\n");}
+["][^\\"]*["] {return STRING;}
 
 
 "=="  {return EQU;}
