@@ -22,10 +22,12 @@ line: exp line | exp;
 
 exp: /* nothing */  
  | term EOL { printf("= %d\n", $1); }
+ | SUB term EOL {printf("= %d\n", $1 * -1);}
  ;
 
-term: NUMBER {$$ = $1;} ;
+term: int_literal;
 
+int_literal: NUMBER {$$ = $1;} ;
 
 %%
 
