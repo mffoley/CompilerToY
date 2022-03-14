@@ -1,3 +1,6 @@
+%{
+# include "toy.tab.h"
+%}
 
 %%
 "bool"    {return BOOL;}

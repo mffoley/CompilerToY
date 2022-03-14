@@ -3,7 +3,7 @@
 %token AND OR NOT;
 %token INT;
 %token STRING COMMENT;
-%token WHITESPACE;
+%token WHITESPACE EOL;
 %token EQU LTE GTE NEQ OB CB SEMICOLON NEGATE OP CP;
 %token ADD SUB MUL DIV ASSIGN LT GT;
 
@@ -15,17 +15,17 @@ calclist: /* nothing */
  | calclist exp EOL { printf("= %d\n", $2); }
  ;
 
-exp: factor       default $$ = $1 
+exp: factor      
  | exp ADD factor { $$ = $1 + $3; }
  | exp SUB factor { $$ = $1 - $3; }
  ;
 
- factor: term       default $$ = $1 
+ factor: term       
  | factor MUL term { $$ = $1 * $3; }
  | factor DIV term { $$ = $1 / $3; }
  ;
 
-term: INT  default $$ = $1
+term: INT  
  | OP exp CP { $$ = $2; }
 ;
 
