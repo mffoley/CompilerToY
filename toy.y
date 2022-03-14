@@ -18,12 +18,13 @@
 
 
 %%
+line: exp line | exp;
 
-calclist: /* nothing */  
+exp: /* nothing */  
  | term EOL { printf("= %d\n", $1); }
  ;
 
-term: NUMBER {$$ = $1}; 
+term: NUMBER {$$ = $1;} ;
 
 
 %%
