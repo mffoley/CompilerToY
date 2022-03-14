@@ -24,7 +24,9 @@
 
 [_a-zA-Z][_a-zA-Z0-9]* {return ID;}
 
--?[1-9][0-9]* {return NUMBER;}
+-?[1-9][0-9]* {
+  yylval = atoi(yytext);
+  return NUMBER;}
 
 ["][^\\"]*["] {return STRING;}
 
