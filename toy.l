@@ -24,7 +24,7 @@
 
 [_a-zA-Z][_a-zA-Z0-9]* {return ID;}
 
--?[1-9][0-9]* {return INT;}
+-?[1-9][0-9]* {return NUMBER;}
 
 ["][^\\"]*["] {return STRING;}
 

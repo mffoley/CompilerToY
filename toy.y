@@ -7,9 +7,9 @@
 %}
 
 
-%token BOOL TRUE FALSE VOID PRINTF STRUCT IF THEN  ELSE FOR RETURN MOD ID;
+%token BOOL TRUE FALSE VOID PRINTF STRUCT IF THEN  ELSE FOR RETURN MOD ID INT;
 %token AND OR NOT;
-%token INT;
+%token NUMBER;
 %token STRING COMMENT;
 %token WHITESPACE EOL;
 %token EQU LTE GTE NEQ OB CB SEMICOLON NEGATE OP CP;
@@ -20,7 +20,7 @@
 %%
 
 calclist: /* nothing */  
- | calclist exp EOL { printf("= %d\n", $2); }
+ | term EOL { printf("= %d\n", $1); }
  ;
 
 exp: factor      
@@ -33,9 +33,7 @@ exp: factor
  | factor DIV term { $$ = $1 / $3; }
  ;
 
-term: INT  
- | OP exp CP { $$ = $2; }
-;
+term: NUMBER {$$ = $1}; 
 
 
 %%
