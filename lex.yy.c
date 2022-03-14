@@ -352,8 +352,8 @@ static void yynoreturn yy_fatal_error ( const char* msg  );
 	(yy_hold_char) = *yy_cp; \
 	*yy_cp = '\0'; \
 	(yy_c_buf_p) = yy_cp;
-#define YY_NUM_RULES 42
-#define YY_END_OF_BUFFER 43
+#define YY_NUM_RULES 41
+#define YY_END_OF_BUFFER 42
 /* This struct is not used in this scanner,
    but its presence is necessary. */
 struct yy_trans_info
@@ -363,7 +363,7 @@ struct yy_trans_info
 	};
 static const flex_int16_t yy_accept[101] =
     {   0,
-        0,    0,   43,   41,   39,   40,   28,   41,   41,   29,
+        0,    0,   42,   41,   39,   40,   28,   41,   41,   29,
        30,   33,   31,   32,   34,   19,   27,   36,   35,   37,
        18,   18,   18,   18,   18,   18,   18,   18,   18,   18,
        18,   18,   18,   18,   25,   26,   39,   24,    0,   20,
@@ -992,15 +992,10 @@ YY_RULE_SETUP
 	YY_BREAK
 case 41:
 YY_RULE_SETUP
-#line 56 "toy.l"
-{ printf("Mystery character %c\n", *yytext); }
-	YY_BREAK
-case 42:
-YY_RULE_SETUP
-#line 59 "toy.l"
+#line 58 "toy.l"
 ECHO;
 	YY_BREAK
-#line 1003 "lex.yy.c"
+#line 998 "lex.yy.c"
 case YY_STATE_EOF(INITIAL):
 	yyterminate();
 
@@ -2005,13 +2000,6 @@ void yyfree (void * ptr )
 
 #define YYTABLES_NAME "yytables"
 
-#line 59 "toy.l"
+#line 58 "toy.l"
 
 
-int yywrap(){}
-int main(){
-  
-yylex();
-  
-return 0;
-}

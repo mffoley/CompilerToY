@@ -150,6 +150,12 @@
 
 
 /* Copy the first part of user declarations.  */
+#line 2 "toy.y"
+
+  #include <stdio.h>
+
+  int yylex();
+  int yyerror(const char *msg);
 
 
 /* Enabling traces.  */
@@ -183,7 +189,7 @@ typedef int YYSTYPE;
 
 
 /* Line 216 of yacc.c.  */
-#line 187 "toy.tab.c"
+#line 193 "toy.tab.c"
 
 #ifdef short
 # undef short
@@ -472,8 +478,8 @@ static const yytype_int8 yyrhs[] =
 /* YYRLINE[YYN] -- source line where rule number YYN was defined.  */
 static const yytype_uint8 yyrline[] =
 {
-       0,    14,    14,    15,    18,    19,    20,    23,    24,    25,
-      28,    29
+       0,    22,    22,    23,    26,    27,    28,    31,    32,    33,
+      36,    37
 };
 #endif
 
@@ -1389,38 +1395,38 @@ yyreduce:
   switch (yyn)
     {
         case 3:
-#line 15 "toy.y"
+#line 23 "toy.y"
     { printf("= %d\n", (yyvsp[(2) - (3)])); ;}
     break;
 
   case 5:
-#line 19 "toy.y"
+#line 27 "toy.y"
     { (yyval) = (yyvsp[(1) - (3)]) + (yyvsp[(3) - (3)]); ;}
     break;
 
   case 6:
-#line 20 "toy.y"
+#line 28 "toy.y"
     { (yyval) = (yyvsp[(1) - (3)]) - (yyvsp[(3) - (3)]); ;}
     break;
 
   case 8:
-#line 24 "toy.y"
+#line 32 "toy.y"
     { (yyval) = (yyvsp[(1) - (3)]) * (yyvsp[(3) - (3)]); ;}
     break;
 
   case 9:
-#line 25 "toy.y"
+#line 33 "toy.y"
     { (yyval) = (yyvsp[(1) - (3)]) / (yyvsp[(3) - (3)]); ;}
     break;
 
   case 11:
-#line 29 "toy.y"
+#line 37 "toy.y"
     { (yyval) = (yyvsp[(2) - (3)]); ;}
     break;
 
 
 /* Line 1267 of yacc.c.  */
-#line 1424 "toy.tab.c"
+#line 1430 "toy.tab.c"
       default: break;
     }
   YY_SYMBOL_PRINT ("-> $$ =", yyr1[yyn], &yyval, &yyloc);
@@ -1634,5 +1640,16 @@ yyreturn:
 }
 
 
-#line 33 "toy.y"
+#line 41 "toy.y"
+
+
+main(int argc, char **argv)
+{
+  yyparse();
+}
+
+int yyerror(const char *msg){
+  fprintf(stderr, "%s\n",msg);
+  return 0;
+}
 

@@ -46,6 +46,6 @@ main(int argc, char **argv)
 }
 
 int yyerror(const char *msg){
-  printf(stderr);
+  fprintf(stderr, "%s\n",msg);
   return 0;
 }
