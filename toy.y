@@ -7,7 +7,7 @@
 %}
 
 
-%token BOOL TRUE FALSE VOID PRINTF STRUCT IF THEN  ELSE FOR RETURN MOD ID INT;
+%token BOOL TRUE FALSE VOID PRINTF STRUCT IF THEN ELSE FOR RETURN MOD ID INT;
 %token AND OR NOT;
 %token NUMBER;
 %token STRING COMMENT;
@@ -16,23 +16,29 @@
 %token ADD SUB MUL DIV ASSIGN LT GT;
 
 
-
 %%
-line: exp line | exp;
+input:	/* empty*/
+	|input line
+	;
 
+line: EOL
+	|exp EOL { printf("= %d\n", $1); }
+	;
 
-exp: /* nothing */  
- | term EOL { printf("= %d\n", $1); }
- | term ADD term EOL {printf("= %d\n", ($1 + $3));}
- | term SUB term EOL {printf("= %d\n", ($1 - $3));}
- | term MUL term EOL {printf("= %d\n", ($1 * $3));}
- | term DIV term EOL {printf("= %d\n", ($1 / $3));}
- | SUB term EOL {printf("= %d\n", $2 * -1);}
+exp: /* nothing */
+ | term { $$ = $1; }
+ | SUB exp { $$ = $2 * -1; }
+ | exp ADD exp {  $$ = $1 + $3; }
+ | exp SUB exp { $$ = $1 - $3; }
+ | exp MUL exp {  $$ = $1 * $3; }
+ | exp DIV exp {  $$ = $1 / $3; }
+ | OP exp CP {  $$ = $2; }
  ;
 
-term: int_literal;
+term: int_literal; 
 
 int_literal: NUMBER {$$ = $1;} ;
+
 
 %%
 
