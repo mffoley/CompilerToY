@@ -51,7 +51,7 @@
 
 (\/\/|##).*\n {return COMMENT;}
 
-[ \s\t]+      
+[ \s\t]+ { }
 
 \n            {return EOL;}
 
