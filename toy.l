@@ -43,6 +43,7 @@
 ")"   {return CP;}
 "+"   {return ADD;}
 "-"   {return SUB;}
+"."   {return DOT;}
 "*"   {return MUL;}
 "/"   {return DIV;}
 "="   {return ASSIGN;}
