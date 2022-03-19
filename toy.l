@@ -44,6 +44,7 @@
 "+"   {return ADD;}
 "-"   {return SUB;}
 "."   {return DOT;}
+","   {return COMMA;}
 "*"   {return MUL;}
 "/"   {return DIV;}
 "="   {return ASSIGN;}

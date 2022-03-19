@@ -13,7 +13,7 @@
 %token STRING COMMENT;
 %token EOL;
 %token EQU LTE GTE NEQ OB CB SEMICOLON NEGATE OP CP;
-%token ADD SUB MUL DIV DOT ASSIGN LT GT;
+%token ADD SUB MUL DIV DOT COMMA ASSIGN LT GT;
 
 
 %%
@@ -43,18 +43,18 @@ int_literal: NUMBER {$$ = $1;}
 ;
 
 string_literal : STRING {$$ = $1;} 
+;
 
 type : INT | BOOL | STRING
 ;
 
-declaration: /* nothing */
-  |type ID declaration
+declaration: type ID
 ;
 
 return_type : type | VOID 
 ;
 
-struct_ : STRUCT ID OB declaration CB
+struct_ : STRUCT ID OB declarations CB
 ;
 
 l_exp : ID | ID DOT l_exp
@@ -70,9 +70,11 @@ stmt : FOR OP ID ASSIGN exp SEMICOLON exp SEMICOLON stmt CP stmt
   | l_exp ASSIGN exp SEMICOLON { sym[$1]=$3;}
 ;
 
-stmt_seq : 
+stmt_seq : /* empty */
  | stmt stmt_seq
  ;
+
+ proc : return_type ID OP declarations CP OB stmt CB
 
 
 %%
@@ -83,6 +85,6 @@ main(int argc, char **argv)
 }
 
 int yyerror(const char *msg){
-  fprintf(stderr, "%s\n",msg);
+  fprintf(stderr, "%s\n", msg);
   return 0;
 }
