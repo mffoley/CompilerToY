@@ -54,7 +54,7 @@ declaration: type ID
 return_type : type | VOID 
 ;
 
-struct_ : STRUCT ID OB declarations CB
+struct_ : STRUCT ID OB declaration CB
 ;
 
 l_exp : ID | ID DOT l_exp
@@ -74,7 +74,7 @@ stmt_seq : /* empty */
  | stmt stmt_seq
  ;
 
- proc : return_type ID OP declarations CP OB stmt CB
+ proc : return_type ID OP declaration CP OB stmt CB
 
 
 %%
