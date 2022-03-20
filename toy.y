@@ -4,7 +4,37 @@
 
   int yylex();
   int yyerror(const char *msg);
+
+  #include <stdlib.h>
+  #include <string.h>
+  #include "sym.h"
+
+  defined(char *name)
+  { 
+    symbol *s = get(name);
+    if (s == 0)
+    {
+      s = put(name);
+    }
+    else
+    {
+      printf( "%s is already defined\n", name );
+      yyerror("is already defined\n");
+    }
+  }
+
+  check(char *name)
+  { 
+    if (get(name) == 0)
+    {
+      printf( "%s is an undeclared identifier\n", name );
+      yyerror("is an undeclared identifier\n");
+    }
+  }
+
+
 %}
+
 
 
 %token BOOL TRUE FALSE VOID PRINTF STRUCT IF THEN ELSE FOR RETURN MOD ID INT;
@@ -22,7 +52,7 @@ input:	/* empty*/
 	;
 
 line: EOL
-	|struct_ EOL { printf("= %d\n", $1); }
+	|declaration EOL {printf("= %d\n", $1); }
 	;
 
 exp: /* nothing */
@@ -48,7 +78,8 @@ string_literal : STRING {$$ = $1;}
 type : INT | BOOL | STRING
 ;
 
-declaration: type ID
+declaration: type ID { printf("%s", $2); }
+
 ;
 
 return_type : type | VOID 
@@ -67,14 +98,14 @@ stmt : FOR OP ID ASSIGN exp SEMICOLON exp SEMICOLON stmt CP stmt
   | RETURN exp SEMICOLON
   | OB stmt_seq  CB
   | type ID SEMICOLON
-  | l_exp ASSIGN exp SEMICOLON { sym[$1]=$3;}
+  | l_exp ASSIGN exp SEMICOLON 
 ;
 
 stmt_seq : /* empty */
  | stmt stmt_seq
  ;
 
- proc : return_type ID OP declaration CP OB stmt CB
+proc : return_type ID OP declaration CP OB stmt CB
 
 
 %%
