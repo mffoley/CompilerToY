@@ -1,6 +1,8 @@
 %{
 # include "toy.tab.h"
+# include <string.h>
 %}
+ 
 
 %%
 "bool"    {return BOOL;}
@@ -21,11 +23,12 @@
 "mod"     {return MOD;}
 "return"  {return RETURN;}
 
+[_a-zA-Z][_a-zA-Z0-9]* {yylval.str = yytext; return IDENTIFIER;}
 
-[_a-zA-Z][_a-zA-Z0-9]* {return ID;}
+
 
 -?[1-9][0-9]*|0 {
-  yylval = atoi(yytext);
+  yylval.val = atoi(yytext);
   return NUMBER;}
 
 ["][^\\"]*["] {return STRING;}
