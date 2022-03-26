@@ -56,17 +56,37 @@ line: EOL
 	;
 
 exp: /* nothing */
- | term { $$ = $1; }
- | SUB exp { $$ = $2 * -1; }
- | exp ADD exp {  $$ = $1 + $3; }
- | exp SUB exp { $$ = $1 - $3; }
- | exp MUL exp {  $$ = $1 * $3; }
- | exp DIV exp {  $$ = $1 / $3; }
+ | string_literal { $$ = $1; }
  | l_exp { $$ = $1; }
  | OP exp CP {  $$ = $2; }
+ | int_exp { $$ = $1; }
+ | bool_exp {  $$ = $1; }
  ;
 
-term: int_literal | string_literal
+int_exp: /* nothing */
+  | int_exp ADD int_exp {  $$ = $1 + $3; }
+  | int_exp SUB int_exp { $$ = $1 - $3; }
+  | int_exp MUL int_exp {  $$ = $1 * $3; }
+  | int_exp DIV int_exp {  $$ = $1 / $3; }
+  | int_exp MOD int_exp {  $$ = $1 % $3; }
+  | SUB int_exp { $$ = $2 * -1; }
+  | int_literal { $$ = $1; }
+  ;
+
+bool_exp: /* nothing */
+  | exp EQU exp { $$ = $1 == $3; }
+  | exp LT exp { $$ = $1 < $3; }
+  | exp GT exp { $$ = $1 > $3; }
+  | exp LTE exp { $$ = $1 <= $3; }
+  | exp GTE exp { $$ = $1 >= $3; }
+  | exp NEQ exp { $$ = $1 != $3; }
+  | NOTEX bool_exp { $$ = ! $2; }
+  | bool_literal { $$ = $1; }
+  ;
+
+
+
+term: int_literal | string_literal | bool_literal
 ; 
 
 int_literal: NUMBER {$$ = $1;} 
@@ -75,10 +95,15 @@ int_literal: NUMBER {$$ = $1;}
 string_literal : STRING {$$ = $1;} 
 ;
 
-type : INT | BOOL | STRING
+bool_literal : TRUE {$$ = $1;} | FALSE {$$ = $1;} 
 ;
 
-declaration: type ID { printf("%s", $2); }
+type : INT {$$ = 4;}
+ | BOOL {$$ = 5;}
+ | STRING {$$ = 6;}
+;
+
+declaration: type ID SEMICOLON { printf("%s", $1); }
 
 ;
 

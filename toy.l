@@ -41,7 +41,7 @@
 "{"   {return OB;}
 "}"   {return CB;}
 ";"   {return SEMICOLON;}
-"!"   {return NEGATE;}
+"!"   {return NOTEX;}
 "("   {return OP;}
 ")"   {return CP;}
 "+"   {return ADD;}
