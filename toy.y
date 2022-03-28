@@ -9,36 +9,23 @@
   #include <string.h>
   #include "sym.h"
 
-  defined(char *name)
-  { 
-    symbol *s = get(name);
-    if (s == 0)
-    {
-      s = put(name);
-    }
-    else
-    {
-      printf( "%s is already defined\n", name );
-      yyerror("is already defined\n");
-    }
-  }
-
-  check(char *name)
-  { 
-    if (get(name) == 0)
-    {
-      printf( "%s is an undeclared identifier\n", name );
-      yyerror("is an undeclared identifier\n");
-    }
+  int printg(){
+    printf("blah");
+    return 0;
   }
 
 
 %}
 
+%union{
+  char* str;
+  int val;
+}
 
 
-%token BOOL TRUE FALSE VOID PRINTF STRUCT IF THEN ELSE FOR RETURN MOD ID INT;
+%token BOOL TRUE FALSE VOID PRINTF STRUCT IF THEN ELSE FOR RETURN MOD INT;
 %token AND OR NOT;
+%token <str> ID;
 %token NUMBER;
 %token STRING COMMENT;
 %token EOL;
@@ -48,69 +35,41 @@
 
 %%
 input:	/* empty*/
-	|input line
+	|input line {}
 	;
 
 line: EOL
-	|declaration EOL {printf("= %d\n", $1); }
+	|proc EOL {}
 	;
-
-exp: /* nothing */
- | string_literal { $$ = $1; }
- | l_exp { $$ = $1; }
- | OP exp CP {  $$ = $2; }
- | int_exp { $$ = $1; }
- | bool_exp {  $$ = $1; }
- ;
-
-int_exp: /* nothing */
-  | int_exp ADD int_exp {  $$ = $1 + $3; }
-  | int_exp SUB int_exp { $$ = $1 - $3; }
-  | int_exp MUL int_exp {  $$ = $1 * $3; }
-  | int_exp DIV int_exp {  $$ = $1 / $3; }
-  | int_exp MOD int_exp {  $$ = $1 % $3; }
-  | SUB int_exp { $$ = $2 * -1; }
-  | int_literal { $$ = $1; }
-  ;
-
-bool_exp: /* nothing */
-  | exp EQU exp { $$ = $1 == $3; }
-  | exp LT exp { $$ = $1 < $3; }
-  | exp GT exp { $$ = $1 > $3; }
-  | exp LTE exp { $$ = $1 <= $3; }
-  | exp GTE exp { $$ = $1 >= $3; }
-  | exp NEQ exp { $$ = $1 != $3; }
-  | NOTEX bool_exp { $$ = ! $2; }
-  | bool_literal { $$ = $1; }
-  ;
-
-
 
 term: int_literal | string_literal | bool_literal
 ; 
 
-int_literal: NUMBER {$$ = $1;} 
+int_literal: NUMBER {} 
 ;
 
-string_literal : STRING {$$ = $1;} 
+string_literal : STRING {} 
 ;
 
-bool_literal : TRUE {$$ = $1;} | FALSE {$$ = $1;} 
+bool_literal : TRUE {} | FALSE {} 
 ;
 
-type : INT {$$ = 4;}
- | BOOL {$$ = 5;}
- | STRING {$$ = 6;}
+type : INT {}
+ | BOOL {}
+ | STRING {}
 ;
 
-declaration: type ID SEMICOLON { printf("%s", $1); }
+declaration: type ID { add_to_scope($2, 4); }
+|declaration COMMA declaration
+;
 
+exp:
 ;
 
 return_type : type | VOID 
 ;
 
-struct_ : STRUCT ID OB declaration CB
+struct_ : STRUCT ID OB declaration CB { } 
 ;
 
 l_exp : ID | ID DOT l_exp
@@ -122,15 +81,17 @@ stmt : FOR OP ID ASSIGN exp SEMICOLON exp SEMICOLON stmt CP stmt
   | PRINTF OP STRING CP SEMICOLON
   | RETURN exp SEMICOLON
   | OB stmt_seq  CB
-  | type ID SEMICOLON
+  | type ID { add_to_scope($2, 4); }
   | l_exp ASSIGN exp SEMICOLON 
 ;
+
 
 stmt_seq : /* empty */
  | stmt stmt_seq
  ;
 
-proc : return_type ID OP declaration CP OB stmt CB
+proc : return_type ID OP declaration CP OB stmt CB { }
+;
 
 
 %%

@@ -23,7 +23,7 @@
 "mod"     {return MOD;}
 "return"  {return RETURN;}
 
-[_a-zA-Z][_a-zA-Z0-9]* {yylval.str = yytext; return IDENTIFIER;}
+[_a-zA-Z][_a-zA-Z0-9]* {yylval.str = yytext; return ID;}
 
 
 
@@ -41,7 +41,7 @@
 "{"   {return OB;}
 "}"   {return CB;}
 ";"   {return SEMICOLON;}
-"!"   {return NOTEX;}
+"!"   {return NEGATE;}
 "("   {return OP;}
 ")"   {return CP;}
 "+"   {return ADD;}

@@ -1,6 +1,6 @@
 #include <stdio.h>
 
-#define SIZE 100;
+#define SIZE 256;
 
 #define VARIABLES 1;
 #define PROC 2;
@@ -28,6 +28,7 @@ struct HashTable {
 };
 
 typedef struct symbol symbol;
+
 struct symbol
 {
   HashTable *hash_table;
@@ -37,13 +38,12 @@ struct symbol
 
 symbol *sym_table = NULL;
 symbol *current = NULL;
-void *create_symbol_table();
-HashTable* create_hash_table();
-int delete_hash_table();
+void* create_symbol_table();
+void* create_hash_table();
+int delete_scope();
 unsigned long hash_function(char* var);
 
 
-//initialising linked list
 void* create_symbol_table()
 { 
   sym_table = (symbol*) malloc (sizeof(symbol));
@@ -51,12 +51,11 @@ void* create_symbol_table()
   sym_table->prev = NULL;
   sym_table->hash_table = NULL;
   current = sym_table;
+  printf("TABLE CREATED\n");
 
 }
 
-//create a new scope
-HashTable* create_hash_table() 
-{
+void* create_hash_table(){
     HashTable* table = (HashTable*) malloc (sizeof(HashTable));
     table->size = SIZE;
     table->count = 0;
@@ -74,11 +73,35 @@ HashTable* create_hash_table()
       current->next->hash_table = table;
       current = current->next;
     }
-    return table;
+      sym_table->hash_table = table;
+      printf("HASH TABLE CREATED\n");
+}
+
+void* add_to_scope(char* name, int type) 
+{
+    if (sym_table == NULL) create_symbol_table();
+    if(current->hash_table == NULL){
+      create_hash_table();
+    }
+    insert(name, type);
+}
+
+void* new_scope() 
+{
+  if(sym_table != NULL){
+  sym_table->next = (symbol*) malloc (sizeof(symbol));
+  sym_table->prev = sym_table;
+  current = sym_table->next;
+  create_hash_table();
+  }
+  else{
+    create_symbol_table();
+  }
+
 }
 
 //delete scope
-int delete_hash_table()
+int delete_scope()
 {
   current->hash_table = NULL;
   current->prev->next = NULL;
@@ -94,35 +117,28 @@ unsigned long hash_function(char* var) {
 
 void insert(char* var, int type)
 {
-  printf("%s", var);
-  printf("%d", type);
-  HashTable* table = current->hash_table;
-  int index = hash_function(var);
-
-  if(check_scope(var, type) == -1){
-
-  items *node = (items*) malloc (sizeof(items));
-  node->return_type = NULL;
-  node->type = type;
-  node->var = var;
-
-  table->items[index] = node;
+  if(check_scope(var) == 0){
+    int index = hash_function(var); 
+    items *node = (items*) malloc (sizeof(items));
+    node->return_type = NULL;
+    node->type = type;
+    node->var = var;
+    current->hash_table->items[index] = node;
   }
   else{
-    printf("Variable already declared");
+    printf("Variable already declared\n");
   }
 }
 
- int check_scope (char *name, int type)
+ int check_scope (char *name)
   { 
     int index = hash_function(name);
     HashTable* table = current->hash_table;
     if(table != NULL) {
     items* item = table->items[index];
       if (item != NULL) {
-         if (strcmp(item->var, name) == 0)
-              return 0;
+              return 1;
       }
     }
-    return -1;
+    return 0;
 }
