@@ -1,8 +1,8 @@
 default:
 	bison -d toy.y
 	flex toy.l
-	gcc toy.tab.c lex.yy.c -ll -Wno-error=implicit-function-declaration
-	./a.out
+	gcc toy.tab.c lex.yy.c -lfl -Wno-error=implicit-function-declaration
+	./a
 
-test:
-	./a.out
+test:cd
+	./a

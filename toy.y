@@ -59,7 +59,7 @@ type : INT {}
  | STRING {}
 ;
 
-declaration: type ID { add_to_scope($2, 4); }
+declaration: type ID { add_to_node_list(4, $2); }
 |declaration COMMA declaration
 ;
 
@@ -69,10 +69,11 @@ exp:
 return_type : type | VOID 
 ;
 
-struct_ : STRUCT ID OB declaration CB { } 
-;
+struct_ : STRUCT ID OB declaration CB { create_struct_table(); create_hash_table_struct(); } 
+; 
 
-l_exp : ID | ID DOT l_exp
+l_exp : ID  { check_scope($1); }
+| ID DOT l_exp { check_scope($1); }
 ;
 
 stmt : FOR OP ID ASSIGN exp SEMICOLON exp SEMICOLON stmt CP stmt
@@ -90,7 +91,7 @@ stmt_seq : /* empty */
  | stmt stmt_seq
  ;
 
-proc : return_type ID OP declaration CP OB stmt CB { }
+proc : return_type ID OP declaration CP OB stmt CB { print_node_list();  }
 ;
 
 

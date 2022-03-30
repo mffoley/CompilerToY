@@ -1,12 +1,5 @@
 %{
-  #include <stdio.h>
 
-  int yylex();
-  int yyerror(const char *msg);
-
-  #include <stdlib.h>
-  #include <string.h>
-  #include "sym.h"
 
 
 %}
