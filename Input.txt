@@ -1,0 +1,2 @@
+struct b { int x , int y }
+struct b { int d , int d }

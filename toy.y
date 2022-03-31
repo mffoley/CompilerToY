@@ -39,8 +39,12 @@ input:	/* empty*/
 	;
 
 line: EOL
-	|proc EOL {}
+	|struct_ EOL {}
 	;
+
+pgm:
+| struct_ pgm { printf("DONE!");}
+
 
 term: int_literal | string_literal | bool_literal
 ; 
@@ -60,7 +64,7 @@ type : INT {}
 ;
 
 declaration: type ID { add_to_node_list(4, $2); }
-|declaration COMMA declaration
+| declaration COMMA declaration {  } 
 ;
 
 exp:
@@ -69,7 +73,7 @@ exp:
 return_type : type | VOID 
 ;
 
-struct_ : STRUCT ID OB declaration CB { create_struct_table(); create_hash_table_struct(); } 
+struct_ : STRUCT ID OB declaration CB { add_to_struct_table($2); print_struct_table(); delete_node_list();  } 
 ; 
 
 l_exp : ID  { check_scope($1); }
@@ -91,18 +95,22 @@ stmt_seq : /* empty */
  | stmt stmt_seq
  ;
 
-proc : return_type ID OP declaration CP OB stmt CB { print_node_list();  }
+proc : return_type ID OP declaration CP OB stmt CB {  }
 ;
 
 
 %%
 
-main(int argc, char **argv)
+main()
 {
-  yyparse();
+    extern FILE *yyin, yyout;
+    
+    yyin = fopen("Input.txt", "r");
+
+    int parse = yyparse();
 }
 
 int yyerror(const char *msg){
-  fprintf(stderr, "%s\n", msg);
+  //fprintf(stderr, "%s\n", msg);
   return 0;
 }
