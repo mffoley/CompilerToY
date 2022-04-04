@@ -62,7 +62,7 @@ symbol *current = NULL; // current scope
 symbol_struct *head_struct = NULL;
 Node *node_list_head = NULL;
 void *create_symbol_table();
-void *create_hash_table();
+HashTable *create_hash_table();
 int delete_scope();
 unsigned long hash_function(char *varible);
 
@@ -108,11 +108,32 @@ void *print_struct_table()
   }
 }
 
+void *print_symbol_table()
+{
+  symbol *sym = current;
+  while (sym != NULL)
+  {
+    printf("PROC NAME : %s\n", sym->name);
+
+    HashTable *table = sym->hash_table;
+    for (int i = 0; i < table->size; i++)
+    {
+      if (table->items[i] != NULL)
+      {
+        printf("VAR NAME : %s\n", table->items[i]->var);
+      }
+    }
+
+    sym = sym->next;
+  }
+}
+
 int add_to_node_list(int type, char *v)
 {
 
-  char *name_var = (char *)malloc(sizeof(char));
-  strcpy(name_var, v);
+  char *token = (char *)malloc(sizeof(char));
+  strcpy(token, v);
+  char *name_var = strtok(token, ";");
 
   Node *node = (Node *)malloc(sizeof(Node));
 
@@ -163,7 +184,7 @@ void *create_struct_table()
   printf("STRUCT TABLE CREATED\n");
 }
 
-void *create_hash_table()
+HashTable *create_hash_table()
 {
   HashTable *table = (HashTable *)malloc(sizeof(HashTable));
   table->size = SIZE;
@@ -172,18 +193,8 @@ void *create_hash_table()
   for (int i = 0; i < table->size; i++)
     table->items[i] = NULL;
 
-  if (current->hash_table == NULL)
-  {
-    current->hash_table = table;
-  }
-  else
-  {
-    current->next = (symbol *)malloc(sizeof(symbol));
-    current->next->prev = current;
-    current->next->hash_table = table;
-    current = current->next;
-  }
   printf("HASH TABLE CREATED\n");
+  return table;
 }
 
 HashTable *create_hash_table_struct()
@@ -206,70 +217,74 @@ void *add_to_struct_table(char *struct_name)
   char *token = strtok(name, "{");
   printf("NAME %s\n", token);
 
- if(check_struct_name(token) == 0){
-  symbol_struct *pre = NULL;
-  if (head_struct == NULL)
-    create_struct_table();
-  else
+  if (check_struct_name(token) == 0)
   {
-    while (head_struct != NULL)
-    {
-      pre = head_struct;
-      head_struct = head_struct->next;
-      printf("HERE\n");
-    }
-  }
-
-  head_struct = (symbol_struct *)malloc(sizeof(symbol_struct));
-  head_struct->name = token;
-  head_struct->next = NULL;
-  head_struct->prev = pre;
-  head_struct->hash_table = create_hash_table_struct();
-
-  if (pre != NULL)
-    pre->next = head_struct;
-
-  Node *node;
-
-  for (node = node_list_head; node != NULL; node = node->next)
-  {
-    if (check_scope_struct(node->var_nam) == 0)
-    {
-      int index = hash_function(node->var_nam);
-      items *n = (items *)malloc(sizeof(items));
-      n->return_type = NULL;
-      n->type = node->type;
-      n->var = node->var_nam;
-      head_struct->hash_table->items[index] = n;
-      printf("ADDING: %s\n", n->var);
-    }
+    symbol_struct *pre = NULL;
+    if (head_struct == NULL)
+      create_struct_table();
     else
     {
-      printf("Var already declared\n");
+      while (head_struct != NULL)
+      {
+        pre = head_struct;
+        head_struct = head_struct->next;
+      }
     }
-  }
 
-  while (head_struct->prev != NULL)
-    head_struct = head_struct->prev;
- }
+    head_struct = (symbol_struct *)malloc(sizeof(symbol_struct));
+    head_struct->name = token;
+    head_struct->next = NULL;
+    head_struct->prev = pre;
+    head_struct->hash_table = create_hash_table_struct();
+
+    if (pre != NULL){
+      pre->next = head_struct;
+    }
+
+    Node *node;
+
+    for (node = node_list_head; node != NULL; node = node->next)
+    {
+      if (check_scope_struct(node->var_nam) == 0)
+      {
+        int index = hash_function(node->var_nam);
+        items *n = (items *)malloc(sizeof(items));
+        n->return_type = NULL;
+        n->type = node->type;
+        n->var = node->var_nam;
+        head_struct->hash_table->items[index] = n;
+        printf("ADDING: %s\n", n->var);
+      }
+      else
+      {
+        printf("Var already declared\n");
+      }
+    }
+
+    while (head_struct->prev != NULL)
+      head_struct = head_struct->prev;
+
+  }
 }
 
-int check_struct_name(char* n)
+int check_struct_name(char *n)
 {
-  while (head_struct != NULL)
+  symbol_struct *curr = head_struct;
+  while (curr != NULL)
   {
-    if(strcmp(head_struct->name, n) == 0)
+    if (strcmp(curr->name, n) == 0)
     {
       printf("Struct already declared\n");
       return 1;
     }
-    head_struct = head_struct->next;
+    curr = curr->next;
   }
-    if (head_struct != NULL)
-    {
-        while (head_struct->prev != NULL) head_struct = head_struct->prev;
-    }
-    return 0;
+  if (head_struct != NULL)
+  {
+    while (head_struct->prev != NULL)
+      head_struct = head_struct->prev;
+  }
+  return 0;
 }
 
 int check_scope_struct(char *n)
@@ -290,41 +305,94 @@ int check_scope_struct(char *n)
   return 0;
 }
 
-// void add_parameters()
+void *add_to_symbol_table(char *proc_name)
+{
+  char *token = (char *)malloc(sizeof(char));
+  strcpy(token, proc_name);
+
+  char *name = strtok(token, "(");
+  if (check_proc_name(name) == 0)
+  {
+    symbol* pre = NULL;
+    if (current == NULL)
+    {
+      create_symbol_table();
+    }
+    else {
+      while(current != NULL)
+      {
+        pre = current;
+        current = current->next;
+      }
+    }
+    
+    current = (symbol *)malloc(sizeof(symbol));
+    current->name = name;
+    current->next = NULL;
+    current->prev = pre;
+
+    current->hash_table = create_hash_table();
+
+    if (pre != NULL)
+       pre->next = current;
+
+    Node *node;
+    for (node = node_list_head; node != NULL; node = node->next)
+    {
+      if (check_scope(node->var_nam) == 0)
+      {
+        int index = hash_function(node->var_nam);
+        items *n = (items *)malloc(sizeof(items));
+        n->return_type = NULL;
+        n->type = node->type;
+        n->var = node->var_nam;
+        current->hash_table->items[index] = n;
+      }
+      else
+      {
+        printf("Var already declared\n");
+      }
+    }
+   
+    while (current->prev != NULL)
+      current = current->prev;
+  }
+}
+
+int check_proc_name(char *name)
+{
+  symbol *sym = current;
+  while (sym != NULL)
+  {
+    if (strcmp(sym->name, name) == 0)
+    {
+      return 1;
+    }
+    sym = sym->next;
+  }
+  if (current != NULL)
+  {
+    while (current->prev != NULL)
+      current = current->prev;
+  }
+  return 0;
+}
+
+// void *new_scope()
 // {
-//   Node* node;
-//   for(node = node_list_head; node != NULL; node = node->next)
+//   if (sym_table != NULL)
 //   {
-//     add_to_scope(node->var_nam, node->type);
+//     sym_table->next = (symbol *)malloc(sizeof(symbol)); // maybe current instead
+//     sym_table->next->prev = sym_table;
+//     current = sym_table->next;
+//     create_hash_table();
+//   }
+//   else
+//   {
+//     create_symbol_table();
+//     create_hash_table();
 //   }
 // }
-
-void *add_to_scope(char *variable_name, int type)
-{
-  if (sym_table == NULL)
-    create_symbol_table();
-  if (current->hash_table == NULL)
-  {
-    create_hash_table();
-  }
-  insert(variable_name, type);
-}
-
-void *new_scope()
-{
-  if (sym_table != NULL)
-  {
-    sym_table->next = (symbol *)malloc(sizeof(symbol)); // maybe current instead
-    sym_table->next->prev = sym_table;
-    current = sym_table->next;
-    create_hash_table();
-  }
-  else
-  {
-    create_symbol_table();
-    create_hash_table();
-  }
-}
 
 // delete scope
 int delete_scope()
@@ -342,33 +410,23 @@ unsigned long hash_function(char *variable)
   return i % SIZE;
 }
 
-void insert(char *ident, int type)
+int check_scope(char *name)
 {
-  if (check_scope(ident) == 0)
-  {
-    int index = hash_function(ident);
-    items *node = (items *)malloc(sizeof(items));
-    node->return_type = NULL;
-    node->type = type;
-    node->var = ident;
-    current->hash_table->items[index] = node;
-  }
-  else
-  {
-    printf("Variable already declared\n");
-  }
-}
-
-int check_scope(char *n)
-{
+  char *token = (char *)malloc(sizeof(char));
+  strcpy(token, name);
+  char *n = strtok(token, " =");
+  
+  printf("CHEKCING SCOPE\n");
   int index = hash_function(n);
   HashTable *table = current->hash_table;
   if (table != NULL)
   {
-    items *item = table->items[index];
+    items *item = (items *)malloc(sizeof(items));
+    item = table->items[index];
     if (item != NULL)
     {
-      return 1;
+      //if (strcmp(item->var, n) == 0)
+        return 1;
     }
   }
   printf("Variable not in scope\n");

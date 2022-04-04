@@ -1,2 +1,4 @@
-struct b { int x , int y }
-struct b { int d , int d }
+struct name { int first, int last }
+struct employee { int id }
+int a ( int x, int y, int z ) { printf("hey"); }
+int b ( int x, int y, int z ) { int g; int q; h = ; }
