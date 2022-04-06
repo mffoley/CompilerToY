@@ -1,4 +1,4 @@
 struct name { int first, int last }
 struct employee { int id }
-int a ( int x, int y, int z ) { printf("hey"); }
-int b ( int x, bool y, int z ) { int g; int q; name person1; }
+int a ( int x, int y, int z ) { int g; name person1; }
+int b ( int x, bool y, int z ) { if (5) then if (5) then {int h; int g; int i;} }

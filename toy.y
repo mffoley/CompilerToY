@@ -26,7 +26,7 @@
 %token BOOL TRUE FALSE VOID PRINTF STRUCT IF THEN ELSE FOR RETURN MOD INT;
 %token AND OR NOT;
 %token <str> ID;
-%token NUMBER;
+%token <val> NUMBER;
 %token STRING COMMENT;
 %token EOL;
 %token EQU LTE GTE NEQ OB CB SEMICOLON NEGATE OP CP;
@@ -37,6 +37,12 @@
 %type <val> struct_;
 %type <val> proc;
 %type <val> l_exp;
+%type <val> Name;
+%type <val> exp;
+%type <val> int_literal;
+%type <val> stmt;
+%type <val> stmt_seq;
+
 
 
 
@@ -54,87 +60,63 @@ pgm2:
 | struct_ pgm2 { }
 ;
 
-pgm: proc pgm2 { }
-| struct_ { print_struct_table();}
+pgm: proc pgm2 { if($1 == 1){printf("-----------------------------Valid Proc\n");} else {printf("-----------------------------Invalid Proc\n"); } }
+| struct_ { if($1 == 1){printf("-----------------------------Valid Struct\n");} else {printf("-----------------------------Invalid Struct\n"); } }
 ;
 
 
-exp: /* nothing */
- | string_literal {  }
- | l_exp { }
- | OP exp CP { }
- | int_exp {}
- | bool_exp { }
+exp: /* nothing */ { $$ = 1; }
+ | int_literal { $$ = $1; }
  ;
 
-int_exp: /* nothing */
-  | int_exp ADD int_exp {  }
-  | int_exp SUB int_exp {  }
-  | int_exp MUL int_exp { }
-  | int_exp DIV int_exp { }
-  | int_exp MOD int_exp {   }
-  | SUB int_exp { }
-  | int_literal {  }
-  ;
-
-bool_exp: /* nothing */
-  | exp EQU exp { }
-  | exp LT exp {  }
-  | exp GT exp {  }
-  | exp LTE exp { }
-  | exp GTE exp { }
-  | exp NEQ exp { }
-  | NEGATE bool_exp {  }
-  | bool_literal {  }
-  ;
-
-term: int_literal | string_literal | bool_literal
-; 
-
-int_literal: NUMBER {} 
-;
-
-string_literal : STRING {} 
-;
-
-bool_literal : TRUE {} | FALSE {} 
+int_literal: NUMBER {$$ = $1;} 
 ;
 
 type : INT { $$ = 4; }
  | BOOL { $$ = 5; }
  | STRING { $$ = 6; }
- | ID { if(check_struct_name($1) == 1) { add_struct_to_scope($1); $$ = 7; } else { $$ = 0; } }
+ | ID { }
 ;
 
-declaration: type ID { if($1 != 0) { add_to_node_list($1, $2); $$ = 1; } }
-| declaration COMMA declaration {  } 
+declaration: type ID { if($1 != 0) { if(add_to_scope($1, $2) == 1){ $$ = 1; } else { $$ = 0;} } else {$$ = 0;}}
+| declaration COMMA declaration { if($1 == 0 || $3 == 0) { $$ = 0; } else {$$ = 1;}  } 
 ;
 
 
 return_type : type | VOID 
 ;
 
-struct_ : STRUCT ID OB declaration CB { if(add_to_struct_table($2) == 0) { $$ = 0; } else { $$ = 1; } delete_node_list();  } 
+struct_ : STRUCT Name OB declaration CB { new_scope(); if($4 == 1 && $2 == 1){ $$ = 1; } else {$$ = 0;}  } 
 ; 
 
-l_exp : ID  {  if(check_scope($1)== 0) { $$ = 0; } else { $$ = 1; } }
-| ID DOT l_exp { print_node_list(); }
+l_exp : ID  {  }
+| ID DOT l_exp { }
+;
+
+intern_scope_then: THEN { add_internal_scope(); }
+;
+
+intern_scope_else: ELSE { delete_scope(); add_internal_scope(); }
 ;
 
 stmt : FOR OP ID ASSIGN exp SEMICOLON exp SEMICOLON stmt CP stmt 
-  | IF exp THEN stmt {}
-  | IF exp THEN stmt ELSE stmt
-  | PRINTF OP STRING CP SEMICOLON
-  | RETURN exp SEMICOLON
-  | type ID SEMICOLON {  if($1 != 0){ add_to_node_list($1, $2); }}
-  | l_exp ASSIGN exp SEMICOLON 
+  | IF OP exp CP intern_scope_then stmt { delete_scope(); if($6 == 0) { $$ = 0; } else { $$ = 1; } }
+  | IF OP exp CP intern_scope_then stmt intern_scope_else stmt { delete_scope(); if($6 == 0 || $8 == 0) { $$ = 0; } else { $$ = 1; } }
+  | PRINTF OP STRING CP SEMICOLON { $$ = 1; }
+  | RETURN exp SEMICOLON  { $$ = 1; }
+  | OB stmt_seq CB { $$ = $2; }
+  | type ID SEMICOLON { if(add_to_scope($1, $2) == 0) { $$ = 0; } else { $$ = 1; } }
+  | l_exp ASSIGN exp SEMICOLON {}
 ;
 
 stmt_seq : /* empty */
- | stmt stmt_seq
+ | stmt stmt_seq { if($1 == 0 || $2 == 0) { $$ = 0; } else { $$ = 1;}}
  ;
 
-proc : return_type ID OP declaration CP OB stmt_seq CB { if(add_to_symbol_table($2) == 0) { $$ = 0; } else { print_symbol_table(); $$ = 1; } delete_node_list();}
+Name : ID { if(add_name($1) == 1){ $$ = 1; } else {$$ = 0;} }
+;
+
+proc : return_type Name OP declaration CP OB stmt_seq CB { print_symbol_table(); new_scope(); if($4 == 1 && $2 == 1 && $7 == 1){ $$ = 1; } else {$$ = 0;}}
 ;
 
 %%
