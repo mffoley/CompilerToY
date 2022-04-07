@@ -1618,7 +1618,7 @@ yyreduce:
 
   case 35: /* stmt: l_exp ASSIGN exp SEMICOLON  */
 #line 109 "toy.y"
-                               { }
+                               { if((yyvsp[-3].val) == 1){ (yyval.val) = 1; } else { (yyval.val) = 0; }}
 #line 1623 "toy.tab.c"
     break;
 

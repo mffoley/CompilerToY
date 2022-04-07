@@ -106,7 +106,7 @@ stmt : FOR_LOOP OP ID ASSIGN exp SEMICOLON exp SEMICOLON stmt CP stmt { delete_s
   | RETURN exp SEMICOLON  { $$ = 1; }
   | OB stmt_seq CB { $$ = $2; }
   | type ID SEMICOLON { if($1 == 0 || add_to_scope($1, $2) == 0) { $$ = 0; } else { $$ = 1; } }
-  | l_exp ASSIGN exp SEMICOLON { }
+  | l_exp ASSIGN exp SEMICOLON { if($1 == 1){ $$ = 1; } else { $$ = 0; }}
 ;
 
 stmt_seq : /* empty */
