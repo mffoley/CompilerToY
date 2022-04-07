@@ -100,7 +100,9 @@ intern_scope_then: THEN { add_internal_scope(); }
 intern_scope_else: ELSE { delete_scope(); add_internal_scope(); }
 ;
 
-stmt : FOR OP ID ASSIGN exp SEMICOLON exp SEMICOLON stmt CP stmt 
+FOR_LOOP: FOR { add_internal_scope(); }
+;
+stmt : FOR_LOOP OP ID ASSIGN exp SEMICOLON exp SEMICOLON stmt CP stmt { delete_scope(); if(check_scope(strtok($3, " =")) == 1 && $9 == 1 && $11 == 1) { $$ = 1; } else { $$ = 0; } printf("Currently: %d", $$); }
   | IF OP exp CP intern_scope_then stmt { delete_scope(); if($6 == 0) { $$ = 0; } else { $$ = 1; } }
   | IF OP exp CP intern_scope_then stmt intern_scope_else stmt { delete_scope(); if($6 == 0 || $8 == 0) { $$ = 0; } else { $$ = 1; } }
   | PRINTF OP STRING CP SEMICOLON { $$ = 1; }

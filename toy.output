@@ -21,7 +21,7 @@ Terminals unused in grammar
 
 
 State 34 conflicts: 1 shift/reduce
-State 75 conflicts: 1 shift/reduce
+State 76 conflicts: 1 shift/reduce
 
 
 Grammar
@@ -66,21 +66,23 @@ Grammar
 
    25 intern_scope_else: ELSE
 
-   26 stmt: FOR OP ID ASSIGN exp SEMICOLON exp SEMICOLON stmt CP stmt
-   27     | IF OP exp CP intern_scope_then stmt
-   28     | IF OP exp CP intern_scope_then stmt intern_scope_else stmt
-   29     | PRINTF OP STRING CP SEMICOLON
-   30     | RETURN exp SEMICOLON
-   31     | OB stmt_seq CB
-   32     | type ID SEMICOLON
-   33     | l_exp ASSIGN exp SEMICOLON
+   26 FOR_LOOP: FOR
 
-   34 stmt_seq: ε
-   35         | stmt stmt_seq
+   27 stmt: FOR_LOOP OP ID ASSIGN exp SEMICOLON exp SEMICOLON stmt CP stmt
+   28     | IF OP exp CP intern_scope_then stmt
+   29     | IF OP exp CP intern_scope_then stmt intern_scope_else stmt
+   30     | PRINTF OP STRING CP SEMICOLON
+   31     | RETURN exp SEMICOLON
+   32     | OB stmt_seq CB
+   33     | type ID SEMICOLON
+   34     | l_exp ASSIGN exp SEMICOLON
 
-   36 Name: ID
+   35 stmt_seq: ε
+   36         | stmt stmt_seq
 
-   37 proc: return_type Name OP declaration CP OB stmt_seq CB
+   37 Name: ID
+
+   38 proc: return_type Name OP declaration CP OB stmt_seq CB
 
 
 Terminals, with rules where they appear
@@ -91,40 +93,40 @@ Terminals, with rules where they appear
     TRUE (259)
     FALSE (260)
     VOID (261) 20
-    PRINTF (262) 29
+    PRINTF (262) 30
     STRUCT (263) 21
-    IF (264) 27 28
+    IF (264) 28 29
     THEN (265) 24
     ELSE (266) 25
     FOR (267) 26
-    RETURN (268) 30
+    RETURN (268) 31
     MOD (269)
     INT (270) 13
     AND (271)
     OR (272)
     NOT (273)
-    ID <str> (274) 16 17 22 23 26 32 36
+    ID <str> (274) 16 17 22 23 27 33 37
     NUMBER <val> (275) 12
-    STRING (276) 15 29
+    STRING (276) 15 30
     COMMENT (277)
     EOL (278) 3 4
     EQU (279)
     LTE (280)
     GTE (281)
     NEQ (282)
-    OB (283) 21 31 37
-    CB (284) 21 31 37
-    SEMICOLON (285) 26 29 30 32 33
+    OB (283) 21 32 38
+    CB (284) 21 32 38
+    SEMICOLON (285) 27 30 31 33 34
     NEGATE (286)
-    OP (287) 26 27 28 29 37
-    CP (288) 26 27 28 29 37
+    OP (287) 27 28 29 30 38
+    CP (288) 27 28 29 30 38
     ADD (289)
     SUB (290)
     MUL (291)
     DIV (292)
     DOT (293) 23
     COMMA (294) 18
-    ASSIGN (295) 26 33
+    ASSIGN (295) 27 34
     LT (296)
     GT (297)
 
@@ -147,42 +149,45 @@ Nonterminals, with rules where they appear
         on right: 4
     exp <val> (48)
         on left: 10 11
-        on right: 26 27 28 30 33
+        on right: 27 28 29 31 34
     int_literal <val> (49)
         on left: 12
         on right: 11
     type <val> (50)
         on left: 13 14 15 16
-        on right: 17 19 32
+        on right: 17 19 33
     declaration <val> (51)
         on left: 17 18
-        on right: 18 21 37
+        on right: 18 21 38
     return_type (52)
         on left: 19 20
-        on right: 37
+        on right: 38
     struct_ <val> (53)
         on left: 21
         on right: 7 9
     l_exp <val> (54)
         on left: 22 23
-        on right: 23 33
+        on right: 23 34
     intern_scope_then (55)
         on left: 24
-        on right: 27 28
+        on right: 28 29
     intern_scope_else (56)
         on left: 25
-        on right: 28
-    stmt <val> (57)
-        on left: 26 27 28 29 30 31 32 33
-        on right: 26 27 28 35
-    stmt_seq <val> (58)
-        on left: 34 35
-        on right: 31 35 37
-    Name <val> (59)
-        on left: 36
-        on right: 21 37
-    proc <val> (60)
+        on right: 29
+    FOR_LOOP (57)
+        on left: 26
+        on right: 27
+    stmt <val> (58)
+        on left: 27 28 29 30 31 32 33 34
+        on right: 27 28 29 36
+    stmt_seq <val> (59)
+        on left: 35 36
+        on right: 32 36 38
+    Name <val> (60)
         on left: 37
+        on right: 21 38
+    proc <val> (61)
+        on left: 38
         on right: 6 8
 
 
@@ -298,7 +303,7 @@ State 12
 
 State 13
 
-   37 proc: return_type • Name OP declaration CP OB stmt_seq CB
+   38 proc: return_type • Name OP declaration CP OB stmt_seq CB
 
     ID  shift, and go to state 16
 
@@ -334,9 +339,9 @@ State 15
 
 State 16
 
-   36 Name: ID •
+   37 Name: ID •
 
-    $default  reduce using rule 36 (Name)
+    $default  reduce using rule 37 (Name)
 
 
 State 17
@@ -355,7 +360,7 @@ State 18
 
 State 19
 
-   37 proc: return_type Name • OP declaration CP OB stmt_seq CB
+   38 proc: return_type Name • OP declaration CP OB stmt_seq CB
 
     OP  shift, and go to state 24
 
@@ -422,7 +427,7 @@ State 23
 
 State 24
 
-   37 proc: return_type Name OP • declaration CP OB stmt_seq CB
+   38 proc: return_type Name OP • declaration CP OB stmt_seq CB
 
     BOOL    shift, and go to state 3
     INT     shift, and go to state 6
@@ -466,7 +471,7 @@ State 28
 State 29
 
    18 declaration: declaration • COMMA declaration
-   37 proc: return_type Name OP declaration • CP OB stmt_seq CB
+   38 proc: return_type Name OP declaration • CP OB stmt_seq CB
 
     CP     shift, and go to state 33
     COMMA  shift, and go to state 32
@@ -501,7 +506,7 @@ State 32
 
 State 33
 
-   37 proc: return_type Name OP declaration CP • OB stmt_seq CB
+   38 proc: return_type Name OP declaration CP • OB stmt_seq CB
 
     OB  shift, and go to state 35
 
@@ -519,7 +524,7 @@ State 34
 
 State 35
 
-   37 proc: return_type Name OP declaration CP OB • stmt_seq CB
+   38 proc: return_type Name OP declaration CP OB • stmt_seq CB
 
     BOOL    shift, and go to state 3
     PRINTF  shift, and go to state 36
@@ -531,39 +536,40 @@ State 35
     STRING  shift, and go to state 8
     OB      shift, and go to state 41
 
-    $default  reduce using rule 34 (stmt_seq)
+    $default  reduce using rule 35 (stmt_seq)
 
     type      go to state 42
     l_exp     go to state 43
-    stmt      go to state 44
-    stmt_seq  go to state 45
+    FOR_LOOP  go to state 44
+    stmt      go to state 45
+    stmt_seq  go to state 46
 
 
 State 36
 
-   29 stmt: PRINTF • OP STRING CP SEMICOLON
-
-    OP  shift, and go to state 46
-
-
-State 37
-
-   27 stmt: IF • OP exp CP intern_scope_then stmt
-   28     | IF • OP exp CP intern_scope_then stmt intern_scope_else stmt
+   30 stmt: PRINTF • OP STRING CP SEMICOLON
 
     OP  shift, and go to state 47
 
 
-State 38
+State 37
 
-   26 stmt: FOR • OP ID ASSIGN exp SEMICOLON exp SEMICOLON stmt CP stmt
+   28 stmt: IF • OP exp CP intern_scope_then stmt
+   29     | IF • OP exp CP intern_scope_then stmt intern_scope_else stmt
 
     OP  shift, and go to state 48
 
 
+State 38
+
+   26 FOR_LOOP: FOR •
+
+    $default  reduce using rule 26 (FOR_LOOP)
+
+
 State 39
 
-   30 stmt: RETURN • exp SEMICOLON
+   31 stmt: RETURN • exp SEMICOLON
 
     NUMBER  shift, and go to state 49
 
@@ -587,7 +593,7 @@ State 40
 
 State 41
 
-   31 stmt: OB • stmt_seq CB
+   32 stmt: OB • stmt_seq CB
 
     BOOL    shift, and go to state 3
     PRINTF  shift, and go to state 36
@@ -599,31 +605,39 @@ State 41
     STRING  shift, and go to state 8
     OB      shift, and go to state 41
 
-    $default  reduce using rule 34 (stmt_seq)
+    $default  reduce using rule 35 (stmt_seq)
 
     type      go to state 42
     l_exp     go to state 43
-    stmt      go to state 44
+    FOR_LOOP  go to state 44
+    stmt      go to state 45
     stmt_seq  go to state 53
 
 
 State 42
 
-   32 stmt: type • ID SEMICOLON
+   33 stmt: type • ID SEMICOLON
 
     ID  shift, and go to state 54
 
 
 State 43
 
-   33 stmt: l_exp • ASSIGN exp SEMICOLON
+   34 stmt: l_exp • ASSIGN exp SEMICOLON
 
     ASSIGN  shift, and go to state 55
 
 
 State 44
 
-   35 stmt_seq: stmt • stmt_seq
+   27 stmt: FOR_LOOP • OP ID ASSIGN exp SEMICOLON exp SEMICOLON stmt CP stmt
+
+    OP  shift, and go to state 56
+
+
+State 45
+
+   36 stmt_seq: stmt • stmt_seq
 
     BOOL    shift, and go to state 3
     PRINTF  shift, and go to state 36
@@ -635,46 +649,40 @@ State 44
     STRING  shift, and go to state 8
     OB      shift, and go to state 41
 
-    $default  reduce using rule 34 (stmt_seq)
+    $default  reduce using rule 35 (stmt_seq)
 
     type      go to state 42
     l_exp     go to state 43
-    stmt      go to state 44
-    stmt_seq  go to state 56
-
-
-State 45
-
-   37 proc: return_type Name OP declaration CP OB stmt_seq • CB
-
-    CB  shift, and go to state 57
+    FOR_LOOP  go to state 44
+    stmt      go to state 45
+    stmt_seq  go to state 57
 
 
 State 46
 
-   29 stmt: PRINTF OP • STRING CP SEMICOLON
+   38 proc: return_type Name OP declaration CP OB stmt_seq • CB
 
-    STRING  shift, and go to state 58
+    CB  shift, and go to state 58
 
 
 State 47
 
-   27 stmt: IF OP • exp CP intern_scope_then stmt
-   28     | IF OP • exp CP intern_scope_then stmt intern_scope_else stmt
+   30 stmt: PRINTF OP • STRING CP SEMICOLON
+
+    STRING  shift, and go to state 59
+
+
+State 48
+
+   28 stmt: IF OP • exp CP intern_scope_then stmt
+   29     | IF OP • exp CP intern_scope_then stmt intern_scope_else stmt
 
     NUMBER  shift, and go to state 49
 
     $default  reduce using rule 10 (exp)
 
-    exp          go to state 59
+    exp          go to state 60
     int_literal  go to state 51
-
-
-State 48
-
-   26 stmt: FOR OP • ID ASSIGN exp SEMICOLON exp SEMICOLON stmt CP stmt
-
-    ID  shift, and go to state 60
 
 
 State 49
@@ -686,7 +694,7 @@ State 49
 
 State 50
 
-   30 stmt: RETURN exp • SEMICOLON
+   31 stmt: RETURN exp • SEMICOLON
 
     SEMICOLON  shift, and go to state 61
 
@@ -709,21 +717,21 @@ State 52
 
 State 53
 
-   31 stmt: OB stmt_seq • CB
+   32 stmt: OB stmt_seq • CB
 
     CB  shift, and go to state 64
 
 
 State 54
 
-   32 stmt: type ID • SEMICOLON
+   33 stmt: type ID • SEMICOLON
 
     SEMICOLON  shift, and go to state 65
 
 
 State 55
 
-   33 stmt: l_exp ASSIGN • exp SEMICOLON
+   34 stmt: l_exp ASSIGN • exp SEMICOLON
 
     NUMBER  shift, and go to state 49
 
@@ -735,45 +743,45 @@ State 55
 
 State 56
 
-   35 stmt_seq: stmt stmt_seq •
+   27 stmt: FOR_LOOP OP • ID ASSIGN exp SEMICOLON exp SEMICOLON stmt CP stmt
 
-    $default  reduce using rule 35 (stmt_seq)
+    ID  shift, and go to state 67
 
 
 State 57
 
-   37 proc: return_type Name OP declaration CP OB stmt_seq CB •
+   36 stmt_seq: stmt stmt_seq •
 
-    $default  reduce using rule 37 (proc)
+    $default  reduce using rule 36 (stmt_seq)
 
 
 State 58
 
-   29 stmt: PRINTF OP STRING • CP SEMICOLON
+   38 proc: return_type Name OP declaration CP OB stmt_seq CB •
 
-    CP  shift, and go to state 67
+    $default  reduce using rule 38 (proc)
 
 
 State 59
 
-   27 stmt: IF OP exp • CP intern_scope_then stmt
-   28     | IF OP exp • CP intern_scope_then stmt intern_scope_else stmt
+   30 stmt: PRINTF OP STRING • CP SEMICOLON
 
     CP  shift, and go to state 68
 
 
 State 60
 
-   26 stmt: FOR OP ID • ASSIGN exp SEMICOLON exp SEMICOLON stmt CP stmt
+   28 stmt: IF OP exp • CP intern_scope_then stmt
+   29     | IF OP exp • CP intern_scope_then stmt intern_scope_else stmt
 
-    ASSIGN  shift, and go to state 69
+    CP  shift, and go to state 69
 
 
 State 61
 
-   30 stmt: RETURN exp SEMICOLON •
+   31 stmt: RETURN exp SEMICOLON •
 
-    $default  reduce using rule 30 (stmt)
+    $default  reduce using rule 31 (stmt)
 
 
 State 62
@@ -795,79 +803,86 @@ State 63
 
 State 64
 
-   31 stmt: OB stmt_seq CB •
-
-    $default  reduce using rule 31 (stmt)
-
-
-State 65
-
-   32 stmt: type ID SEMICOLON •
+   32 stmt: OB stmt_seq CB •
 
     $default  reduce using rule 32 (stmt)
 
 
+State 65
+
+   33 stmt: type ID SEMICOLON •
+
+    $default  reduce using rule 33 (stmt)
+
+
 State 66
 
-   33 stmt: l_exp ASSIGN exp • SEMICOLON
+   34 stmt: l_exp ASSIGN exp • SEMICOLON
 
     SEMICOLON  shift, and go to state 70
 
 
 State 67
 
-   29 stmt: PRINTF OP STRING CP • SEMICOLON
+   27 stmt: FOR_LOOP OP ID • ASSIGN exp SEMICOLON exp SEMICOLON stmt CP stmt
 
-    SEMICOLON  shift, and go to state 71
+    ASSIGN  shift, and go to state 71
 
 
 State 68
 
-   27 stmt: IF OP exp CP • intern_scope_then stmt
-   28     | IF OP exp CP • intern_scope_then stmt intern_scope_else stmt
+   30 stmt: PRINTF OP STRING CP • SEMICOLON
 
-    THEN  shift, and go to state 72
-
-    intern_scope_then  go to state 73
+    SEMICOLON  shift, and go to state 72
 
 
 State 69
 
-   26 stmt: FOR OP ID ASSIGN • exp SEMICOLON exp SEMICOLON stmt CP stmt
+   28 stmt: IF OP exp CP • intern_scope_then stmt
+   29     | IF OP exp CP • intern_scope_then stmt intern_scope_else stmt
+
+    THEN  shift, and go to state 73
+
+    intern_scope_then  go to state 74
+
+
+State 70
+
+   34 stmt: l_exp ASSIGN exp SEMICOLON •
+
+    $default  reduce using rule 34 (stmt)
+
+
+State 71
+
+   27 stmt: FOR_LOOP OP ID ASSIGN • exp SEMICOLON exp SEMICOLON stmt CP stmt
 
     NUMBER  shift, and go to state 49
 
     $default  reduce using rule 10 (exp)
 
-    exp          go to state 74
+    exp          go to state 75
     int_literal  go to state 51
 
 
-State 70
-
-   33 stmt: l_exp ASSIGN exp SEMICOLON •
-
-    $default  reduce using rule 33 (stmt)
-
-
-State 71
-
-   29 stmt: PRINTF OP STRING CP SEMICOLON •
-
-    $default  reduce using rule 29 (stmt)
-
-
 State 72
+
+   30 stmt: PRINTF OP STRING CP SEMICOLON •
+
+    $default  reduce using rule 30 (stmt)
+
+
+State 73
 
    24 intern_scope_then: THEN •
 
     $default  reduce using rule 24 (intern_scope_then)
 
 
-State 73
+State 74
 
-   27 stmt: IF OP exp CP intern_scope_then • stmt
-   28     | IF OP exp CP intern_scope_then • stmt intern_scope_else stmt
+   28 stmt: IF OP exp CP intern_scope_then • stmt
+   29     | IF OP exp CP intern_scope_then • stmt intern_scope_else stmt
 
     BOOL    shift, and go to state 3
     PRINTF  shift, and go to state 36
@@ -879,53 +894,54 @@ State 73
     STRING  shift, and go to state 8
     OB      shift, and go to state 41
 
-    type   go to state 42
-    l_exp  go to state 43
-    stmt   go to state 75
-
-
-State 74
-
-   26 stmt: FOR OP ID ASSIGN exp • SEMICOLON exp SEMICOLON stmt CP stmt
-
-    SEMICOLON  shift, and go to state 76
+    type      go to state 42
+    l_exp     go to state 43
+    FOR_LOOP  go to state 44
+    stmt      go to state 76
 
 
 State 75
 
-   27 stmt: IF OP exp CP intern_scope_then stmt •
-   28     | IF OP exp CP intern_scope_then stmt • intern_scope_else stmt
+   27 stmt: FOR_LOOP OP ID ASSIGN exp • SEMICOLON exp SEMICOLON stmt CP stmt
 
-    ELSE  shift, and go to state 77
-
-    ELSE      [reduce using rule 27 (stmt)]
-    $default  reduce using rule 27 (stmt)
-
-    intern_scope_else  go to state 78
+    SEMICOLON  shift, and go to state 77
 
 
 State 76
 
-   26 stmt: FOR OP ID ASSIGN exp SEMICOLON • exp SEMICOLON stmt CP stmt
+   28 stmt: IF OP exp CP intern_scope_then stmt •
+   29     | IF OP exp CP intern_scope_then stmt • intern_scope_else stmt
+
+    ELSE  shift, and go to state 78
+
+    ELSE      [reduce using rule 28 (stmt)]
+    $default  reduce using rule 28 (stmt)
+
+    intern_scope_else  go to state 79
+
+
+State 77
+
+   27 stmt: FOR_LOOP OP ID ASSIGN exp SEMICOLON • exp SEMICOLON stmt CP stmt
 
     NUMBER  shift, and go to state 49
 
     $default  reduce using rule 10 (exp)
 
-    exp          go to state 79
+    exp          go to state 80
     int_literal  go to state 51
 
 
-State 77
+State 78
 
    25 intern_scope_else: ELSE •
 
     $default  reduce using rule 25 (intern_scope_else)
 
 
-State 78
+State 79
 
-   28 stmt: IF OP exp CP intern_scope_then stmt intern_scope_else • stmt
+   29 stmt: IF OP exp CP intern_scope_then stmt intern_scope_else • stmt
 
     BOOL    shift, and go to state 3
     PRINTF  shift, and go to state 36
@@ -937,54 +953,29 @@ State 78
     STRING  shift, and go to state 8
     OB      shift, and go to state 41
 
-    type   go to state 42
-    l_exp  go to state 43
-    stmt   go to state 80
-
-
-State 79
-
-   26 stmt: FOR OP ID ASSIGN exp SEMICOLON exp • SEMICOLON stmt CP stmt
-
-    SEMICOLON  shift, and go to state 81
+    type      go to state 42
+    l_exp     go to state 43
+    FOR_LOOP  go to state 44
+    stmt      go to state 81
 
 
 State 80
 
-   28 stmt: IF OP exp CP intern_scope_then stmt intern_scope_else stmt •
+   27 stmt: FOR_LOOP OP ID ASSIGN exp SEMICOLON exp • SEMICOLON stmt CP stmt
 
-    $default  reduce using rule 28 (stmt)
+    SEMICOLON  shift, and go to state 82
 
 
 State 81
 
-   26 stmt: FOR OP ID ASSIGN exp SEMICOLON exp SEMICOLON • stmt CP stmt
+   29 stmt: IF OP exp CP intern_scope_then stmt intern_scope_else stmt •
 
-    BOOL    shift, and go to state 3
-    PRINTF  shift, and go to state 36
-    IF      shift, and go to state 37
-    FOR     shift, and go to state 38
-    RETURN  shift, and go to state 39
-    INT     shift, and go to state 6
-    ID      shift, and go to state 40
-    STRING  shift, and go to state 8
-    OB      shift, and go to state 41
-
-    type   go to state 42
-    l_exp  go to state 43
-    stmt   go to state 82
+    $default  reduce using rule 29 (stmt)
 
 
 State 82
 
-   26 stmt: FOR OP ID ASSIGN exp SEMICOLON exp SEMICOLON stmt • CP stmt
-
-    CP  shift, and go to state 83
-
-
-State 83
-
-   26 stmt: FOR OP ID ASSIGN exp SEMICOLON exp SEMICOLON stmt CP • stmt
+   27 stmt: FOR_LOOP OP ID ASSIGN exp SEMICOLON exp SEMICOLON • stmt CP stmt
 
     BOOL    shift, and go to state 3
     PRINTF  shift, and go to state 36
@@ -996,13 +987,41 @@ State 83
     STRING  shift, and go to state 8
     OB      shift, and go to state 41
 
-    type   go to state 42
-    l_exp  go to state 43
-    stmt   go to state 84
+    type      go to state 42
+    l_exp     go to state 43
+    FOR_LOOP  go to state 44
+    stmt      go to state 83
+
+
+State 83
+
+   27 stmt: FOR_LOOP OP ID ASSIGN exp SEMICOLON exp SEMICOLON stmt • CP stmt
+
+    CP  shift, and go to state 84
 
 
 State 84
 
-   26 stmt: FOR OP ID ASSIGN exp SEMICOLON exp SEMICOLON stmt CP stmt •
+   27 stmt: FOR_LOOP OP ID ASSIGN exp SEMICOLON exp SEMICOLON stmt CP • stmt
 
-    $default  reduce using rule 26 (stmt)
+    BOOL    shift, and go to state 3
+    PRINTF  shift, and go to state 36
+    IF      shift, and go to state 37
+    FOR     shift, and go to state 38
+    RETURN  shift, and go to state 39
+    INT     shift, and go to state 6
+    ID      shift, and go to state 40
+    STRING  shift, and go to state 8
+    OB      shift, and go to state 41
+
+    type      go to state 42
+    l_exp     go to state 43
+    FOR_LOOP  go to state 44
+    stmt      go to state 85
+
+
+State 85
+
+   27 stmt: FOR_LOOP OP ID ASSIGN exp SEMICOLON exp SEMICOLON stmt CP stmt •
+
+    $default  reduce using rule 27 (stmt)
