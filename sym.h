@@ -49,6 +49,7 @@ struct symbol
   struct symbol *next;
   struct symbol *prev;
   int internal_scope;
+  int is_struct;
   symbol *inner_scope;
 };
 
@@ -85,14 +86,22 @@ int add_to_scope(int type, char *n)
     n->type = type;
     n->var = var_name;
     symbol_table->curr->hash_table->items[index] = n;
-    printf("ADDING: %s\n", n->var);
+    // printf("ADDING: %s\n", n->var);
     return 1;
   }
   else
   {
-    printf("Here with: %s\n", var_name);
+    // printf("Here with: %s\n", var_name);
     return 0;
   }
+}
+
+int is_struct(int integer)
+{
+  if (integer == 1)
+    symbol_table->curr->is_struct = 1;
+  else
+    symbol_table->curr->is_struct = 0;
 }
 
 int add_name(char *name)
@@ -129,7 +138,7 @@ int check_name(char *name)
 
 void new_scope()
 {
-  printf("New Scope\n");
+  // printf("New Scope\n");
   symbol *new = (symbol *)malloc(sizeof(symbol));
   new->hash_table = create_hash_table();
   new->inner_scope = NULL;
@@ -137,6 +146,7 @@ void new_scope()
   new->name = NULL;
   new->next = NULL;
   new->prev = symbol_table->curr;
+  new->is_struct = 0;
   symbol_table->curr->next = new;
   symbol_table->curr = symbol_table->curr->next;
 }
@@ -147,13 +157,15 @@ void *print_symbol_table()
   while (sym != NULL)
   {
     printf("NAME : %s\n", sym->name);
+    if (sym->is_struct == 1)
+      printf("Struct\n");
 
     HashTable *table = sym->hash_table;
     for (int i = 0; i < table->size; i++)
     {
       if (table->items[i] != NULL)
       {
-        printf("VAR NAME : %s\n", table->items[i]->var);
+        printf("VAR NAME : %s, VAR TYPE : %d\n", table->items[i]->var, table->items[i]->type);
       }
     }
 
@@ -166,7 +178,7 @@ void *print_symbol_table()
       {
         if (table->items[i] != NULL)
         {
-          printf("VAR NAME : %s\n", table->items[i]->var);
+          printf("VAR NAME : %s, VAR TYPE : %d\n", table->items[i]->var, table->items[i]->type);
         }
       }
       sym = sym->inner_scope;
@@ -193,7 +205,8 @@ void *create_symbol_table()
   first->hash_table = create_hash_table();
   symbol_table->curr = first;
   symbol_table->head = first;
-  printf("TABLE CREATED\n");
+  symbol_table->curr->is_struct = 0;
+  // printf("TABLE CREATED\n");
 }
 
 HashTable *create_hash_table()
@@ -205,7 +218,7 @@ HashTable *create_hash_table()
   for (int i = 0; i < table->size; i++)
     table->items[i] = NULL;
 
-  printf("HASH TABLE CREATED\n");
+  // printf("HASH TABLE CREATED\n");
   return table;
 }
 
@@ -218,7 +231,8 @@ void add_internal_scope()
   symbol_table->curr->inner_scope->hash_table = create_hash_table();
   symbol_table->curr = symbol_table->curr->inner_scope;
   symbol_table->curr->internal_scope = 1;
-  printf("Added Internal Scope\n");
+  symbol_table->curr->is_struct = 0;
+  // printf("Added Internal Scope\n");
 }
 
 void delete_scope()
@@ -226,7 +240,7 @@ void delete_scope()
   if (symbol_table->curr->prev != NULL)
   {
     symbol_table->curr = symbol_table->curr->prev;
-    printf("deleted!\n");
+    // printf("deleted!\n");
   }
 }
 
@@ -247,7 +261,7 @@ int check_scope(char *name)
   int index = hash_function(n);
   symbol *temp = symbol_table->curr;
   HashTable *table = temp->hash_table;
-  printf("hey hey\n");
+  // printf("hey hey\n");
   if (temp->internal_scope == 1)
   {
     while (temp->internal_scope != 0)
@@ -259,27 +273,79 @@ int check_scope(char *name)
         item = table->items[index];
         if (item != NULL)
         {
-          printf("Variable in some internal scope: %s", temp->name);
-          // if (strcmp(item->var, n) == 0)
+          // printf("Variable in some internal scope: %s", temp->name);
+          //  if (strcmp(item->var, n) == 0)
           return 1;
         }
       }
       temp = temp->prev;
     }
   }
-  //checking outer scope
-    table = temp->hash_table;
+  // checking outer scope
+  table = temp->hash_table;
+  if (table != NULL)
+  {
+    items *item = (items *)malloc(sizeof(items));
+    item = table->items[index];
+    if (item != NULL)
+    {
+      // printf("Variable in outer scope: %s\n", name);
+      //  if (strcmp(item->var, n) == 0)
+      return 1;
+    }
+  }
+  // printf("Variable not in scope\n");
+  return 0;
+}
+
+int add_struct_to_scope(char *n)
+{
+  n = strtok(n, " ");
+  symbol *temp = symbol_table->head;
+  char *str_name;
+  strcpy(str_name, n);
+
+  while (temp != NULL)
+  {
+    if ((strcmp(temp->name, str_name) == 0) && (temp->is_struct == 1))
+    {
+      HashTable *table = temp->hash_table;
       if (table != NULL)
       {
-        items *item = (items *)malloc(sizeof(items));
-        item = table->items[index];
-        if (item != NULL)
+        for (int index = 0; index < table->size; index++)
         {
-          printf("Variable in outer scope: %s\n", name);
-          // if (strcmp(item->var, n) == 0)
-          return 1;
+          items *item = table->items[index];
+          if (item != NULL)
+          {
+            add_to_scope(item->type, item->var);
+          }
         }
       }
-  printf("Variable not in scope\n");
+      return 1;
+    }
+    temp = temp->next;
+  }
+  return 0;
+}
+
+int check_if_struct(char *name)
+{
+  symbol *temp = symbol_table->curr;
+
+  HashTable *table = temp->hash_table;
+  if (table != NULL)
+  {
+    items *item = (items *)malloc(sizeof(items));
+    for (int index = 0; index < table->size; index++)
+    {
+      item = table->items[index];
+      if (item != NULL)
+      {
+        if (strcmp(name, item->var) == 0 && item->type == 7)
+          return 1;
+      }
+    }
+  }
+  temp = temp->next;
   return 0;
 }

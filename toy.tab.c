@@ -564,10 +564,10 @@ static const yytype_int8 yytranslate[] =
 /* YYRLINE[YYN] -- Source line where rule number YYN was defined.  */
 static const yytype_int8 yyrline[] =
 {
-       0,    51,    51,    52,    55,    56,    59,    60,    61,    64,
-      65,    69,    70,    73,    76,    77,    78,    79,    82,    83,
-      87,    87,    90,    93,    94,    97,   100,   103,   105,   106,
-     107,   108,   109,   110,   111,   112,   115,   116,   119,   122
+       0,    48,    48,    49,    52,    53,    56,    57,    58,    61,
+      62,    66,    67,    70,    73,    74,    75,    76,    79,    80,
+      84,    84,    87,    90,    91,    94,    97,   100,   102,   103,
+     104,   105,   106,   107,   108,   109,   112,   113,   116,   119
 };
 #endif
 
@@ -1449,193 +1449,193 @@ yyreduce:
   switch (yyn)
     {
   case 3: /* input: input line  */
-#line 52 "toy.y"
+#line 49 "toy.y"
                     {}
 #line 1455 "toy.tab.c"
     break;
 
   case 5: /* line: pgm EOL  */
-#line 56 "toy.y"
+#line 53 "toy.y"
                  {}
 #line 1461 "toy.tab.c"
     break;
 
   case 7: /* pgm2: proc pgm2  */
-#line 60 "toy.y"
+#line 57 "toy.y"
             { }
 #line 1467 "toy.tab.c"
     break;
 
   case 8: /* pgm2: struct_ pgm2  */
-#line 61 "toy.y"
+#line 58 "toy.y"
                { }
 #line 1473 "toy.tab.c"
     break;
 
   case 9: /* pgm: proc pgm2  */
-#line 64 "toy.y"
+#line 61 "toy.y"
                { if((yyvsp[-1].val) == 1){printf("-----------------------------Valid Proc\n");} else {printf("-----------------------------Invalid Proc\n"); } }
 #line 1479 "toy.tab.c"
     break;
 
   case 10: /* pgm: struct_  */
-#line 65 "toy.y"
+#line 62 "toy.y"
           { if((yyvsp[0].val) == 1){printf("-----------------------------Valid Struct\n");} else {printf("-----------------------------Invalid Struct\n"); } }
 #line 1485 "toy.tab.c"
     break;
 
   case 11: /* exp: %empty  */
-#line 69 "toy.y"
+#line 66 "toy.y"
                    { (yyval.val) = 1; }
 #line 1491 "toy.tab.c"
     break;
 
   case 12: /* exp: int_literal  */
-#line 70 "toy.y"
+#line 67 "toy.y"
                { (yyval.val) = (yyvsp[0].val); }
 #line 1497 "toy.tab.c"
     break;
 
   case 13: /* int_literal: NUMBER  */
-#line 73 "toy.y"
+#line 70 "toy.y"
                     {(yyval.val) = (yyvsp[0].val);}
 #line 1503 "toy.tab.c"
     break;
 
   case 14: /* type: INT  */
-#line 76 "toy.y"
+#line 73 "toy.y"
            { (yyval.val) = 4; }
 #line 1509 "toy.tab.c"
     break;
 
   case 15: /* type: BOOL  */
-#line 77 "toy.y"
+#line 74 "toy.y"
         { (yyval.val) = 5; }
 #line 1515 "toy.tab.c"
     break;
 
   case 16: /* type: STRING  */
-#line 78 "toy.y"
+#line 75 "toy.y"
           { (yyval.val) = 6; }
 #line 1521 "toy.tab.c"
     break;
 
   case 17: /* type: ID  */
-#line 79 "toy.y"
-      { }
+#line 76 "toy.y"
+      { printf(" "); if(add_struct_to_scope((yyvsp[0].str)) == 1){ (yyval.val) = 7; } else { (yyval.val) = 0;}}
 #line 1527 "toy.tab.c"
     break;
 
   case 18: /* declaration: type ID  */
-#line 82 "toy.y"
-                     { if((yyvsp[-1].val) != 0) { if(add_to_scope((yyvsp[-1].val), (yyvsp[0].str)) == 1){ (yyval.val) = 1; } else { (yyval.val) = 0;} } else {(yyval.val) = 0;}}
+#line 79 "toy.y"
+                     {if((yyvsp[-1].val) != 0) { if(add_to_scope((yyvsp[-1].val), (yyvsp[0].str)) == 1){ (yyval.val) = 1; } else { (yyval.val) = 0;} } else {(yyval.val) = 0;}}
 #line 1533 "toy.tab.c"
     break;
 
   case 19: /* declaration: declaration COMMA declaration  */
-#line 83 "toy.y"
+#line 80 "toy.y"
                                 { if((yyvsp[-2].val) == 0 || (yyvsp[0].val) == 0) { (yyval.val) = 0; } else {(yyval.val) = 1;}  }
 #line 1539 "toy.tab.c"
     break;
 
   case 22: /* struct_: STRUCT Name OB declaration CB  */
-#line 90 "toy.y"
-                                        { new_scope(); if((yyvsp[-1].val) == 1 && (yyvsp[-3].val) == 1){ (yyval.val) = 1; } else {(yyval.val) = 0;}  }
+#line 87 "toy.y"
+                                        { is_struct(1); new_scope(); if((yyvsp[-1].val) == 1 && (yyvsp[-3].val) == 1){ (yyval.val) = 1; } else {(yyval.val) = 0;}  }
 #line 1545 "toy.tab.c"
     break;
 
   case 23: /* l_exp: ID  */
-#line 93 "toy.y"
-            {  }
+#line 90 "toy.y"
+            { if(check_scope(strtok((yyvsp[0].str), " =")) == 1) { (yyval.val) = 1; } }
 #line 1551 "toy.tab.c"
     break;
 
   case 24: /* l_exp: ID DOT l_exp  */
-#line 94 "toy.y"
-               { }
+#line 91 "toy.y"
+               { if((check_scope(strtok((yyvsp[-2].str), ".")) == 1) && (check_if_struct(strtok((yyvsp[-2].str), ".")) == 1)) { printf("Is a Struct\n"); } }
 #line 1557 "toy.tab.c"
     break;
 
   case 25: /* intern_scope_then: THEN  */
-#line 97 "toy.y"
+#line 94 "toy.y"
                         { add_internal_scope(); }
 #line 1563 "toy.tab.c"
     break;
 
   case 26: /* intern_scope_else: ELSE  */
-#line 100 "toy.y"
+#line 97 "toy.y"
                         { delete_scope(); add_internal_scope(); }
 #line 1569 "toy.tab.c"
     break;
 
   case 27: /* FOR_LOOP: FOR  */
-#line 103 "toy.y"
+#line 100 "toy.y"
               { add_internal_scope(); }
 #line 1575 "toy.tab.c"
     break;
 
   case 28: /* stmt: FOR_LOOP OP ID ASSIGN exp SEMICOLON exp SEMICOLON stmt CP stmt  */
-#line 105 "toy.y"
-                                                                      { delete_scope(); if(check_scope(strtok((yyvsp[-8].str), " =")) == 1 && (yyvsp[-2].val) == 1 && (yyvsp[0].val) == 1) { (yyval.val) = 1; } else { (yyval.val) = 0; } printf("Currently: %d", (yyval.val)); }
+#line 102 "toy.y"
+                                                                      { delete_scope(); if(check_scope(strtok((yyvsp[-8].str), " =")) == 1 && (yyvsp[-2].val) == 1 && (yyvsp[0].val) == 1) { (yyval.val) = 1; } else { (yyval.val) = 0; } }
 #line 1581 "toy.tab.c"
     break;
 
   case 29: /* stmt: IF OP exp CP intern_scope_then stmt  */
-#line 106 "toy.y"
+#line 103 "toy.y"
                                         { delete_scope(); if((yyvsp[0].val) == 0) { (yyval.val) = 0; } else { (yyval.val) = 1; } }
 #line 1587 "toy.tab.c"
     break;
 
   case 30: /* stmt: IF OP exp CP intern_scope_then stmt intern_scope_else stmt  */
-#line 107 "toy.y"
+#line 104 "toy.y"
                                                                { delete_scope(); if((yyvsp[-2].val) == 0 || (yyvsp[0].val) == 0) { (yyval.val) = 0; } else { (yyval.val) = 1; } }
 #line 1593 "toy.tab.c"
     break;
 
   case 31: /* stmt: PRINTF OP STRING CP SEMICOLON  */
-#line 108 "toy.y"
+#line 105 "toy.y"
                                   { (yyval.val) = 1; }
 #line 1599 "toy.tab.c"
     break;
 
   case 32: /* stmt: RETURN exp SEMICOLON  */
-#line 109 "toy.y"
+#line 106 "toy.y"
                           { (yyval.val) = 1; }
 #line 1605 "toy.tab.c"
     break;
 
   case 33: /* stmt: OB stmt_seq CB  */
-#line 110 "toy.y"
+#line 107 "toy.y"
                    { (yyval.val) = (yyvsp[-1].val); }
 #line 1611 "toy.tab.c"
     break;
 
   case 34: /* stmt: type ID SEMICOLON  */
-#line 111 "toy.y"
-                      { if(add_to_scope((yyvsp[-2].val), (yyvsp[-1].str)) == 0) { (yyval.val) = 0; } else { (yyval.val) = 1; } }
+#line 108 "toy.y"
+                      { if((yyvsp[-2].val) == 0 || add_to_scope((yyvsp[-2].val), (yyvsp[-1].str)) == 0) { (yyval.val) = 0; } else { (yyval.val) = 1; } }
 #line 1617 "toy.tab.c"
     break;
 
   case 35: /* stmt: l_exp ASSIGN exp SEMICOLON  */
-#line 112 "toy.y"
-                               {}
+#line 109 "toy.y"
+                               { }
 #line 1623 "toy.tab.c"
     break;
 
   case 37: /* stmt_seq: stmt stmt_seq  */
-#line 116 "toy.y"
+#line 113 "toy.y"
                  { if((yyvsp[-1].val) == 0 || (yyvsp[0].val) == 0) { (yyval.val) = 0; } else { (yyval.val) = 1;}}
 #line 1629 "toy.tab.c"
     break;
 
   case 38: /* Name: ID  */
-#line 119 "toy.y"
+#line 116 "toy.y"
           { if(add_name((yyvsp[0].str)) == 1){ (yyval.val) = 1; } else {(yyval.val) = 0;} }
 #line 1635 "toy.tab.c"
     break;
 
   case 39: /* proc: return_type Name OP declaration CP OB stmt_seq CB  */
-#line 122 "toy.y"
+#line 119 "toy.y"
                                                          { print_symbol_table(); new_scope(); if((yyvsp[-4].val) == 1 && (yyvsp[-6].val) == 1 && (yyvsp[-1].val) == 1){ (yyval.val) = 1; } else {(yyval.val) = 0;}}
 #line 1641 "toy.tab.c"
     break;
@@ -1865,7 +1865,7 @@ yyreturnlab:
   return yyresult;
 }
 
-#line 125 "toy.y"
+#line 122 "toy.y"
 
 
 main()
