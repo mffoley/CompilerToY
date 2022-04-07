@@ -39,7 +39,6 @@ struct HashTable
 };
 
 typedef struct symbol symbol;
-typedef struct symbol_struct symbol_struct;
 typedef struct table table;
 
 struct symbol
@@ -58,20 +57,9 @@ struct table
   symbol *curr;
 };
 
-struct symbol_struct
-{
-  char *name;
-  HashTable *hash_table;
-  struct symbol_struct *next;
-  struct symbol_struct *prev;
-};
-
 table *symbol_table = NULL;
-symbol *sym_table = NULL;
-symbol_struct *struct_table = NULL;
 symbol *current = NULL; // current scope
 symbol *previous = NULL;
-symbol_struct *head_struct = NULL;
 Node *node_list_head = NULL;
 void *create_symbol_table();
 HashTable *create_hash_table();
@@ -152,48 +140,6 @@ void new_scope()
   symbol_table->curr = symbol_table->curr->next;
 }
 
-// void *delete_node_list()
-// {
-//   node_list_head = NULL;
-//   printf("NODE LIST DELETED\n");
-// }
-
-// void *print_node_list()
-// {
-
-//   Node *node;
-//   node = node_list_head;
-//   int i = 0;
-//   while (node != NULL)
-//   {
-//     printf("%d\n", i);
-//     printf("ID : %s\n", node->var_nam);
-//     printf("TYPE : %d\n", node->type);
-//     node = node->next;
-//     i++;
-//   }
-// }
-
-// void *print_struct_table()
-// {
-//   symbol_struct *sym = head_struct;
-//   while (sym != NULL)
-//   {
-//     printf("STRUCT NAME : %s\n", sym->name);
-
-//     HashTable *table = sym->hash_table;
-//     for (int i = 0; i < table->size; i++)
-//     {
-//       if (table->items[i] != NULL)
-//       {
-//         printf("VAR NAME : %s\n", table->items[i]->var);
-//       }
-//     }
-
-//     sym = sym->next;
-//   }
-// }
-
 void *print_symbol_table()
 {
   symbol *sym = symbol_table->head;
@@ -233,39 +179,6 @@ void *print_symbol_table()
     sym = sym->next;
   }
 }
-
-// int add_to_node_list(int type, char *v)
-// {
-
-//   char *token = (char *)malloc(sizeof(char));
-//   strcpy(token, v);
-//   char *name_var = strtok(token, ";");
-
-//   Node *node = (Node *)malloc(sizeof(Node));
-
-//   node->type = type;
-//   node->var_nam = name_var;
-
-//   if (node_list_head == NULL)
-//   {
-//     node_list_head = node;
-//   }
-
-//   else
-//   {
-//     Node *curr = node_list_head;
-//     while (1)
-//     {
-//       if (curr->next == NULL)
-//       {
-//         curr->next = node;
-//         break;
-//       }
-//       curr = curr->next;
-//     };
-//   }
-//   return 0;
-// }
 
 void *create_symbol_table()
 {
@@ -369,30 +282,3 @@ int check_scope(char *name)
   printf("Variable not in scope\n");
   return 0;
 }
-
-// int check_struct_in_scope(char* s)
-// {
-//   char *token = (char *)malloc(sizeof(char));
-//   strcpy(token, s);
-//   char *n = strtok(token, ".");
-
-//   int index = hash_function(n);
-//   HashTable *table = current->hash_table;
-//   if (table != NULL)
-//   {
-//     items *item = (items *)malloc(sizeof(items));
-//     item = table->items[index];
-//     printf("%s", item->var);
-//     if (item != NULL)
-//     {
-//       if (strcmp(item->var, n) == 0){
-//         if(item->type == 7){
-//           printf("Scoop\n");
-//         return 1;
-//         }
-//       }
-//     }
-//   }
-//   //Variable not in scope
-//   return 0;
-// }

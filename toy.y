@@ -1,3 +1,4 @@
+%define parse.error verbose
 
 %{
   #include <stdio.h>
