@@ -15,21 +15,14 @@
 
 typedef struct HashTable HashTable;
 typedef struct items items;
-typedef struct Node Node;
 
 struct items
 {
   char *var;
-  HashTable *value;
+  //HashTable *value;
   int return_type;
   int type;
-};
-
-struct Node
-{
-  char *var_nam;
-  int type;
-  struct Node *next;
+  char* name_struct;
 };
 
 struct HashTable
@@ -62,7 +55,6 @@ struct table
 table *symbol_table = NULL;
 symbol *current = NULL; // current scope
 symbol *previous = NULL;
-Node *node_list_head = NULL;
 void *create_symbol_table();
 HashTable *create_hash_table();
 unsigned long hash_function(char *varible);
