@@ -19,7 +19,6 @@ typedef struct items items;
 struct items
 {
   char *var;
-  //HashTable *value;
   int return_type;
   int type;
   char* name_struct;
@@ -54,7 +53,6 @@ struct table
 
 table *symbol_table = NULL;
 symbol *current = NULL; // current scope
-symbol *previous = NULL;
 void *create_symbol_table();
 HashTable *create_hash_table();
 unsigned long hash_function(char *varible);
