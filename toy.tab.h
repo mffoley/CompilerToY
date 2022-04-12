@@ -74,26 +74,25 @@ extern int yydebug;
     NUMBER = 275,                  /* NUMBER  */
     STRING = 276,                  /* STRING  */
     COMMENT = 277,                 /* COMMENT  */
-    EOL = 278,                     /* EOL  */
-    EQU = 279,                     /* EQU  */
-    LTE = 280,                     /* LTE  */
-    GTE = 281,                     /* GTE  */
-    NEQ = 282,                     /* NEQ  */
-    OB = 283,                      /* OB  */
-    CB = 284,                      /* CB  */
-    SEMICOLON = 285,               /* SEMICOLON  */
-    NEGATE = 286,                  /* NEGATE  */
-    OP = 287,                      /* OP  */
-    CP = 288,                      /* CP  */
-    ADD = 289,                     /* ADD  */
-    SUB = 290,                     /* SUB  */
-    MUL = 291,                     /* MUL  */
-    DIV = 292,                     /* DIV  */
-    DOT = 293,                     /* DOT  */
-    COMMA = 294,                   /* COMMA  */
-    ASSIGN = 295,                  /* ASSIGN  */
-    LT = 296,                      /* LT  */
-    GT = 297                       /* GT  */
+    EQU = 278,                     /* EQU  */
+    LTE = 279,                     /* LTE  */
+    GTE = 280,                     /* GTE  */
+    NEQ = 281,                     /* NEQ  */
+    OB = 282,                      /* OB  */
+    CB = 283,                      /* CB  */
+    SEMICOLON = 284,               /* SEMICOLON  */
+    NEGATE = 285,                  /* NEGATE  */
+    OP = 286,                      /* OP  */
+    CP = 287,                      /* CP  */
+    ADD = 288,                     /* ADD  */
+    SUB = 289,                     /* SUB  */
+    MUL = 290,                     /* MUL  */
+    DIV = 291,                     /* DIV  */
+    DOT = 292,                     /* DOT  */
+    COMMA = 293,                   /* COMMA  */
+    ASSIGN = 294,                  /* ASSIGN  */
+    LT = 295,                      /* LT  */
+    GT = 296                       /* GT  */
   };
   typedef enum yytokentype yytoken_kind_t;
 #endif
@@ -107,7 +106,7 @@ union YYSTYPE
   char* str;
   int val;
 
-#line 111 "toy.tab.h"
+#line 110 "toy.tab.h"
 
 };
 typedef union YYSTYPE YYSTYPE;

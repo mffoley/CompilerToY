@@ -290,7 +290,7 @@ int check_scope(char *name)
 
 int add_struct_to_scope(char *n)
 {
-  n = strtok(n, " ");
+  //n = strtok(n, " ");
   symbol *temp = symbol_table->head;
   char *str_name;
   strcpy(str_name, n);
@@ -338,4 +338,12 @@ int check_if_struct(char *name)
   }
   temp = temp->next;
   return 0;
+}
+
+void store_struct_name(char* name)
+{
+  //created a new value in item
+  //this should take in the struct name and struct variable
+  //search for the variable in the current scope
+  // when you find it you should store the struct name with it
 }
