@@ -20,8 +20,17 @@ Terminals unused in grammar
     GT
 
 
-State 34 conflicts: 1 shift/reduce
-State 76 conflicts: 1 shift/reduce
+Rules useless in parser due to conflicts
+
+    3 line: ε
+
+
+State 1 conflicts: 7 shift/reduce
+State 14 conflicts: 6 shift/reduce
+State 19 conflicts: 6 shift/reduce
+State 20 conflicts: 6 shift/reduce
+State 32 conflicts: 1 shift/reduce
+State 74 conflicts: 1 shift/reduce
 
 
 Grammar
@@ -31,8 +40,8 @@ Grammar
     1 input: ε
     2      | input line
 
-    3 line: EOL
-    4     | pgm EOL
+    3 line: ε
+    4     | pgm
 
     5 pgm2: ε
     6     | proc pgm2
@@ -109,84 +118,83 @@ Terminals, with rules where they appear
     NUMBER <val> (275) 12
     STRING (276) 15 30
     COMMENT (277)
-    EOL (278) 3 4
-    EQU (279)
-    LTE (280)
-    GTE (281)
-    NEQ (282)
-    OB (283) 21 32 38
-    CB (284) 21 32 38
-    SEMICOLON (285) 27 30 31 33 34
-    NEGATE (286)
-    OP (287) 27 28 29 30 38
-    CP (288) 27 28 29 30 38
-    ADD (289)
-    SUB (290)
-    MUL (291)
-    DIV (292)
-    DOT (293) 23
-    COMMA (294) 18
-    ASSIGN (295) 27 34
-    LT (296)
-    GT (297)
+    EQU (278)
+    LTE (279)
+    GTE (280)
+    NEQ (281)
+    OB (282) 21 32 38
+    CB (283) 21 32 38
+    SEMICOLON (284) 27 30 31 33 34
+    NEGATE (285)
+    OP (286) 27 28 29 30 38
+    CP (287) 27 28 29 30 38
+    ADD (288)
+    SUB (289)
+    MUL (290)
+    DIV (291)
+    DOT (292) 23
+    COMMA (293) 18
+    ASSIGN (294) 27 34
+    LT (295)
+    GT (296)
 
 
 Nonterminals, with rules where they appear
 
-    $accept (43)
+    $accept (42)
         on left: 0
-    input (44)
+    input (43)
         on left: 1 2
         on right: 0 2
-    line (45)
+    line (44)
         on left: 3 4
         on right: 2
-    pgm2 (46)
+    pgm2 (45)
         on left: 5 6 7
         on right: 6 7 8
-    pgm (47)
+    pgm (46)
         on left: 8 9
         on right: 4
-    exp <val> (48)
+    exp <val> (47)
         on left: 10 11
         on right: 27 28 29 31 34
-    int_literal <val> (49)
+    int_literal <val> (48)
         on left: 12
         on right: 11
-    type <val> (50)
+    type <val> (49)
         on left: 13 14 15 16
         on right: 17 19 33
-    declaration <val> (51)
+    declaration <val> (50)
         on left: 17 18
         on right: 18 21 38
-    return_type (52)
+    return_type (51)
         on left: 19 20
         on right: 38
-    struct_ <val> (53)
+    struct_ <val> (52)
         on left: 21
         on right: 7 9
-    l_exp <val> (54)
+    l_exp <val> (53)
         on left: 22 23
         on right: 23 34
-    intern_scope_then (55)
+    intern_scope_then (54)
         on left: 24
         on right: 28 29
-    intern_scope_else (56)
+    intern_scope_else (55)
         on left: 25
         on right: 29
-    FOR_LOOP (57)
+    FOR_LOOP (56)
         on left: 26
         on right: 27
-    stmt <val> (58)
+    stmt <val> (57)
         on left: 27 28 29 30 31 32 33 34
         on right: 27 28 29 36
-    stmt_seq <val> (59)
+    stmt_seq <val> (58)
         on left: 35 36
         on right: 32 36 38
-    Name <val> (60)
+    Name <val> (59)
         on left: 37
         on right: 21 38
-    proc <val> (61)
+    proc <val> (60)
         on left: 38
         on right: 6 8
 
@@ -212,14 +220,21 @@ State 1
     INT     shift, and go to state 6
     ID      shift, and go to state 7
     STRING  shift, and go to state 8
-    EOL     shift, and go to state 9
 
-    line         go to state 10
-    pgm          go to state 11
-    type         go to state 12
-    return_type  go to state 13
-    struct_      go to state 14
-    proc         go to state 15
+    $end    [reduce using rule 3 (line)]
+    BOOL    [reduce using rule 3 (line)]
+    VOID    [reduce using rule 3 (line)]
+    STRUCT  [reduce using rule 3 (line)]
+    INT     [reduce using rule 3 (line)]
+    ID      [reduce using rule 3 (line)]
+    STRING  [reduce using rule 3 (line)]
+
+    line         go to state 9
+    pgm          go to state 10
+    type         go to state 11
+    return_type  go to state 12
+    struct_      go to state 13
+    proc         go to state 14
 
 
 State 2
@@ -247,9 +262,9 @@ State 5
 
    21 struct_: STRUCT • Name OB declaration CB
 
-    ID  shift, and go to state 16
+    ID  shift, and go to state 15
 
-    Name  go to state 17
+    Name  go to state 16
 
 
 State 6
@@ -275,49 +290,42 @@ State 8
 
 State 9
 
-    3 line: EOL •
-
-    $default  reduce using rule 3 (line)
-
-
-State 10
-
     2 input: input line •
 
     $default  reduce using rule 2 (input)
 
 
+State 10
+
+    4 line: pgm •
+
+    $default  reduce using rule 4 (line)
+
+
 State 11
-
-    4 line: pgm • EOL
-
-    EOL  shift, and go to state 18
-
-
-State 12
 
    19 return_type: type •
 
     $default  reduce using rule 19 (return_type)
 
 
-State 13
+State 12
 
    38 proc: return_type • Name OP declaration CP OB stmt_seq CB
 
-    ID  shift, and go to state 16
+    ID  shift, and go to state 15
 
-    Name  go to state 19
+    Name  go to state 17
 
 
-State 14
+State 13
 
     9 pgm: struct_ •
 
     $default  reduce using rule 9 (pgm)
 
 
-State 15
+State 14
 
     8 pgm: proc • pgm2
 
@@ -328,51 +336,50 @@ State 15
     ID      shift, and go to state 7
     STRING  shift, and go to state 8
 
+    BOOL      [reduce using rule 5 (pgm2)]
+    VOID      [reduce using rule 5 (pgm2)]
+    STRUCT    [reduce using rule 5 (pgm2)]
+    INT       [reduce using rule 5 (pgm2)]
+    ID        [reduce using rule 5 (pgm2)]
+    STRING    [reduce using rule 5 (pgm2)]
     $default  reduce using rule 5 (pgm2)
 
-    pgm2         go to state 20
-    type         go to state 12
-    return_type  go to state 13
-    struct_      go to state 21
-    proc         go to state 22
+    pgm2         go to state 18
+    type         go to state 11
+    return_type  go to state 12
+    struct_      go to state 19
+    proc         go to state 20
 
 
-State 16
+State 15
 
    37 Name: ID •
 
     $default  reduce using rule 37 (Name)
 
 
-State 17
+State 16
 
    21 struct_: STRUCT Name • OB declaration CB
 
-    OB  shift, and go to state 23
+    OB  shift, and go to state 21
 
 
-State 18
-
-    4 line: pgm EOL •
-
-    $default  reduce using rule 4 (line)
-
-
-State 19
+State 17
 
    38 proc: return_type Name • OP declaration CP OB stmt_seq CB
 
-    OP  shift, and go to state 24
+    OP  shift, and go to state 22
 
 
-State 20
+State 18
 
     8 pgm: proc pgm2 •
 
     $default  reduce using rule 8 (pgm)
 
 
-State 21
+State 19
 
     7 pgm2: struct_ • pgm2
 
@@ -383,16 +390,22 @@ State 21
     ID      shift, and go to state 7
     STRING  shift, and go to state 8
 
+    BOOL      [reduce using rule 5 (pgm2)]
+    VOID      [reduce using rule 5 (pgm2)]
+    STRUCT    [reduce using rule 5 (pgm2)]
+    INT       [reduce using rule 5 (pgm2)]
+    ID        [reduce using rule 5 (pgm2)]
+    STRING    [reduce using rule 5 (pgm2)]
     $default  reduce using rule 5 (pgm2)
 
-    pgm2         go to state 25
-    type         go to state 12
-    return_type  go to state 13
-    struct_      go to state 21
-    proc         go to state 22
+    pgm2         go to state 23
+    type         go to state 11
+    return_type  go to state 12
+    struct_      go to state 19
+    proc         go to state 20
 
 
-State 22
+State 20
 
     6 pgm2: proc • pgm2
 
@@ -403,16 +416,22 @@ State 22
     ID      shift, and go to state 7
     STRING  shift, and go to state 8
 
+    BOOL      [reduce using rule 5 (pgm2)]
+    VOID      [reduce using rule 5 (pgm2)]
+    STRUCT    [reduce using rule 5 (pgm2)]
+    INT       [reduce using rule 5 (pgm2)]
+    ID        [reduce using rule 5 (pgm2)]
+    STRING    [reduce using rule 5 (pgm2)]
     $default  reduce using rule 5 (pgm2)
 
-    pgm2         go to state 26
-    type         go to state 12
-    return_type  go to state 13
-    struct_      go to state 21
-    proc         go to state 22
+    pgm2         go to state 24
+    type         go to state 11
+    return_type  go to state 12
+    struct_      go to state 19
+    proc         go to state 20
 
 
-State 23
+State 21
 
    21 struct_: STRUCT Name OB • declaration CB
 
@@ -421,11 +440,11 @@ State 23
     ID      shift, and go to state 7
     STRING  shift, and go to state 8
 
-    type         go to state 27
-    declaration  go to state 28
+    type         go to state 25
+    declaration  go to state 26
 
 
-State 24
+State 22
 
    38 proc: return_type Name OP • declaration CP OB stmt_seq CB
 
@@ -434,64 +453,64 @@ State 24
     ID      shift, and go to state 7
     STRING  shift, and go to state 8
 
-    type         go to state 27
-    declaration  go to state 29
+    type         go to state 25
+    declaration  go to state 27
 
 
-State 25
+State 23
 
     7 pgm2: struct_ pgm2 •
 
     $default  reduce using rule 7 (pgm2)
 
 
-State 26
+State 24
 
     6 pgm2: proc pgm2 •
 
     $default  reduce using rule 6 (pgm2)
 
 
-State 27
+State 25
 
    17 declaration: type • ID
 
-    ID  shift, and go to state 30
+    ID  shift, and go to state 28
 
 
-State 28
+State 26
 
    18 declaration: declaration • COMMA declaration
    21 struct_: STRUCT Name OB declaration • CB
 
-    CB     shift, and go to state 31
-    COMMA  shift, and go to state 32
+    CB     shift, and go to state 29
+    COMMA  shift, and go to state 30
 
 
-State 29
+State 27
 
    18 declaration: declaration • COMMA declaration
    38 proc: return_type Name OP declaration • CP OB stmt_seq CB
 
-    CP     shift, and go to state 33
-    COMMA  shift, and go to state 32
+    CP     shift, and go to state 31
+    COMMA  shift, and go to state 30
 
 
-State 30
+State 28
 
    17 declaration: type ID •
 
     $default  reduce using rule 17 (declaration)
 
 
-State 31
+State 29
 
    21 struct_: STRUCT Name OB declaration CB •
 
     $default  reduce using rule 21 (struct_)
 
 
-State 32
+State 30
 
    18 declaration: declaration COMMA • declaration
 
@@ -500,527 +519,527 @@ State 32
     ID      shift, and go to state 7
     STRING  shift, and go to state 8
 
-    type         go to state 27
-    declaration  go to state 34
+    type         go to state 25
+    declaration  go to state 32
 
 
-State 33
+State 31
 
    38 proc: return_type Name OP declaration CP • OB stmt_seq CB
 
-    OB  shift, and go to state 35
+    OB  shift, and go to state 33
 
 
-State 34
+State 32
 
    18 declaration: declaration • COMMA declaration
    18            | declaration COMMA declaration •
 
-    COMMA  shift, and go to state 32
+    COMMA  shift, and go to state 30
 
     COMMA     [reduce using rule 18 (declaration)]
     $default  reduce using rule 18 (declaration)
 
 
-State 35
+State 33
 
    38 proc: return_type Name OP declaration CP OB • stmt_seq CB
 
     BOOL    shift, and go to state 3
-    PRINTF  shift, and go to state 36
-    IF      shift, and go to state 37
-    FOR     shift, and go to state 38
-    RETURN  shift, and go to state 39
+    PRINTF  shift, and go to state 34
+    IF      shift, and go to state 35
+    FOR     shift, and go to state 36
+    RETURN  shift, and go to state 37
     INT     shift, and go to state 6
-    ID      shift, and go to state 40
+    ID      shift, and go to state 38
     STRING  shift, and go to state 8
-    OB      shift, and go to state 41
+    OB      shift, and go to state 39
 
     $default  reduce using rule 35 (stmt_seq)
 
-    type      go to state 42
-    l_exp     go to state 43
-    FOR_LOOP  go to state 44
-    stmt      go to state 45
-    stmt_seq  go to state 46
+    type      go to state 40
+    l_exp     go to state 41
+    FOR_LOOP  go to state 42
+    stmt      go to state 43
+    stmt_seq  go to state 44
 
 
-State 36
+State 34
 
    30 stmt: PRINTF • OP STRING CP SEMICOLON
 
-    OP  shift, and go to state 47
+    OP  shift, and go to state 45
 
 
-State 37
+State 35
 
    28 stmt: IF • OP exp CP intern_scope_then stmt
    29     | IF • OP exp CP intern_scope_then stmt intern_scope_else stmt
 
-    OP  shift, and go to state 48
+    OP  shift, and go to state 46
 
 
-State 38
+State 36
 
    26 FOR_LOOP: FOR •
 
     $default  reduce using rule 26 (FOR_LOOP)
 
 
-State 39
+State 37
 
    31 stmt: RETURN • exp SEMICOLON
 
-    NUMBER  shift, and go to state 49
+    NUMBER  shift, and go to state 47
 
     $default  reduce using rule 10 (exp)
 
-    exp          go to state 50
-    int_literal  go to state 51
+    exp          go to state 48
+    int_literal  go to state 49
 
 
-State 40
+State 38
 
    16 type: ID •
    22 l_exp: ID •
    23      | ID • DOT l_exp
 
-    DOT  shift, and go to state 52
+    DOT  shift, and go to state 50
 
     ASSIGN    reduce using rule 22 (l_exp)
     $default  reduce using rule 16 (type)
 
 
-State 41
+State 39
 
    32 stmt: OB • stmt_seq CB
 
     BOOL    shift, and go to state 3
-    PRINTF  shift, and go to state 36
-    IF      shift, and go to state 37
-    FOR     shift, and go to state 38
-    RETURN  shift, and go to state 39
+    PRINTF  shift, and go to state 34
+    IF      shift, and go to state 35
+    FOR     shift, and go to state 36
+    RETURN  shift, and go to state 37
     INT     shift, and go to state 6
-    ID      shift, and go to state 40
+    ID      shift, and go to state 38
     STRING  shift, and go to state 8
-    OB      shift, and go to state 41
+    OB      shift, and go to state 39
 
     $default  reduce using rule 35 (stmt_seq)
 
-    type      go to state 42
-    l_exp     go to state 43
-    FOR_LOOP  go to state 44
-    stmt      go to state 45
-    stmt_seq  go to state 53
+    type      go to state 40
+    l_exp     go to state 41
+    FOR_LOOP  go to state 42
+    stmt      go to state 43
+    stmt_seq  go to state 51
+
+
+State 40
+
+   33 stmt: type • ID SEMICOLON
+
+    ID  shift, and go to state 52
+
+
+State 41
+
+   34 stmt: l_exp • ASSIGN exp SEMICOLON
+
+    ASSIGN  shift, and go to state 53
 
 
 State 42
 
-   33 stmt: type • ID SEMICOLON
+   27 stmt: FOR_LOOP • OP ID ASSIGN exp SEMICOLON exp SEMICOLON stmt CP stmt
 
-    ID  shift, and go to state 54
+    OP  shift, and go to state 54
 
 
 State 43
 
-   34 stmt: l_exp • ASSIGN exp SEMICOLON
+   36 stmt_seq: stmt • stmt_seq
 
-    ASSIGN  shift, and go to state 55
+    BOOL    shift, and go to state 3
+    PRINTF  shift, and go to state 34
+    IF      shift, and go to state 35
+    FOR     shift, and go to state 36
+    RETURN  shift, and go to state 37
+    INT     shift, and go to state 6
+    ID      shift, and go to state 38
+    STRING  shift, and go to state 8
+    OB      shift, and go to state 39
+
+    $default  reduce using rule 35 (stmt_seq)
+
+    type      go to state 40
+    l_exp     go to state 41
+    FOR_LOOP  go to state 42
+    stmt      go to state 43
+    stmt_seq  go to state 55
 
 
 State 44
 
-   27 stmt: FOR_LOOP • OP ID ASSIGN exp SEMICOLON exp SEMICOLON stmt CP stmt
+   38 proc: return_type Name OP declaration CP OB stmt_seq • CB
 
-    OP  shift, and go to state 56
+    CB  shift, and go to state 56
 
 
 State 45
 
-   36 stmt_seq: stmt • stmt_seq
+   30 stmt: PRINTF OP • STRING CP SEMICOLON
 
-    BOOL    shift, and go to state 3
-    PRINTF  shift, and go to state 36
-    IF      shift, and go to state 37
-    FOR     shift, and go to state 38
-    RETURN  shift, and go to state 39
-    INT     shift, and go to state 6
-    ID      shift, and go to state 40
-    STRING  shift, and go to state 8
-    OB      shift, and go to state 41
-
-    $default  reduce using rule 35 (stmt_seq)
-
-    type      go to state 42
-    l_exp     go to state 43
-    FOR_LOOP  go to state 44
-    stmt      go to state 45
-    stmt_seq  go to state 57
+    STRING  shift, and go to state 57
 
 
 State 46
 
-   38 proc: return_type Name OP declaration CP OB stmt_seq • CB
-
-    CB  shift, and go to state 58
-
-
-State 47
-
-   30 stmt: PRINTF OP • STRING CP SEMICOLON
-
-    STRING  shift, and go to state 59
-
-
-State 48
-
    28 stmt: IF OP • exp CP intern_scope_then stmt
    29     | IF OP • exp CP intern_scope_then stmt intern_scope_else stmt
 
-    NUMBER  shift, and go to state 49
+    NUMBER  shift, and go to state 47
 
     $default  reduce using rule 10 (exp)
 
-    exp          go to state 60
-    int_literal  go to state 51
+    exp          go to state 58
+    int_literal  go to state 49
 
 
-State 49
+State 47
 
    12 int_literal: NUMBER •
 
     $default  reduce using rule 12 (int_literal)
 
 
-State 50
+State 48
 
    31 stmt: RETURN exp • SEMICOLON
 
-    SEMICOLON  shift, and go to state 61
+    SEMICOLON  shift, and go to state 59
 
 
-State 51
+State 49
 
    11 exp: int_literal •
 
     $default  reduce using rule 11 (exp)
 
 
-State 52
+State 50
 
    23 l_exp: ID DOT • l_exp
 
-    ID  shift, and go to state 62
+    ID  shift, and go to state 60
 
-    l_exp  go to state 63
+    l_exp  go to state 61
+
+
+State 51
+
+   32 stmt: OB stmt_seq • CB
+
+    CB  shift, and go to state 62
+
+
+State 52
+
+   33 stmt: type ID • SEMICOLON
+
+    SEMICOLON  shift, and go to state 63
 
 
 State 53
 
-   32 stmt: OB stmt_seq • CB
+   34 stmt: l_exp ASSIGN • exp SEMICOLON
 
-    CB  shift, and go to state 64
+    NUMBER  shift, and go to state 47
+
+    $default  reduce using rule 10 (exp)
+
+    exp          go to state 64
+    int_literal  go to state 49
 
 
 State 54
 
-   33 stmt: type ID • SEMICOLON
+   27 stmt: FOR_LOOP OP • ID ASSIGN exp SEMICOLON exp SEMICOLON stmt CP stmt
 
-    SEMICOLON  shift, and go to state 65
+    ID  shift, and go to state 65
 
 
 State 55
-
-   34 stmt: l_exp ASSIGN • exp SEMICOLON
-
-    NUMBER  shift, and go to state 49
-
-    $default  reduce using rule 10 (exp)
-
-    exp          go to state 66
-    int_literal  go to state 51
-
-
-State 56
-
-   27 stmt: FOR_LOOP OP • ID ASSIGN exp SEMICOLON exp SEMICOLON stmt CP stmt
-
-    ID  shift, and go to state 67
-
-
-State 57
 
    36 stmt_seq: stmt stmt_seq •
 
     $default  reduce using rule 36 (stmt_seq)
 
 
-State 58
+State 56
 
    38 proc: return_type Name OP declaration CP OB stmt_seq CB •
 
     $default  reduce using rule 38 (proc)
 
 
-State 59
+State 57
 
    30 stmt: PRINTF OP STRING • CP SEMICOLON
 
-    CP  shift, and go to state 68
+    CP  shift, and go to state 66
 
 
-State 60
+State 58
 
    28 stmt: IF OP exp • CP intern_scope_then stmt
    29     | IF OP exp • CP intern_scope_then stmt intern_scope_else stmt
 
-    CP  shift, and go to state 69
+    CP  shift, and go to state 67
 
 
-State 61
+State 59
 
    31 stmt: RETURN exp SEMICOLON •
 
     $default  reduce using rule 31 (stmt)
 
 
-State 62
+State 60
 
    22 l_exp: ID •
    23      | ID • DOT l_exp
 
-    DOT  shift, and go to state 52
+    DOT  shift, and go to state 50
 
     $default  reduce using rule 22 (l_exp)
 
 
-State 63
+State 61
 
    23 l_exp: ID DOT l_exp •
 
     $default  reduce using rule 23 (l_exp)
 
 
-State 64
+State 62
 
    32 stmt: OB stmt_seq CB •
 
     $default  reduce using rule 32 (stmt)
 
 
-State 65
+State 63
 
    33 stmt: type ID SEMICOLON •
 
     $default  reduce using rule 33 (stmt)
 
 
-State 66
+State 64
 
    34 stmt: l_exp ASSIGN exp • SEMICOLON
+
+    SEMICOLON  shift, and go to state 68
+
+
+State 65
+
+   27 stmt: FOR_LOOP OP ID • ASSIGN exp SEMICOLON exp SEMICOLON stmt CP stmt
+
+    ASSIGN  shift, and go to state 69
+
+
+State 66
+
+   30 stmt: PRINTF OP STRING CP • SEMICOLON
 
     SEMICOLON  shift, and go to state 70
 
 
 State 67
 
-   27 stmt: FOR_LOOP OP ID • ASSIGN exp SEMICOLON exp SEMICOLON stmt CP stmt
-
-    ASSIGN  shift, and go to state 71
-
-
-State 68
-
-   30 stmt: PRINTF OP STRING CP • SEMICOLON
-
-    SEMICOLON  shift, and go to state 72
-
-
-State 69
-
    28 stmt: IF OP exp CP • intern_scope_then stmt
    29     | IF OP exp CP • intern_scope_then stmt intern_scope_else stmt
 
-    THEN  shift, and go to state 73
+    THEN  shift, and go to state 71
 
-    intern_scope_then  go to state 74
+    intern_scope_then  go to state 72
 
 
-State 70
+State 68
 
    34 stmt: l_exp ASSIGN exp SEMICOLON •
 
     $default  reduce using rule 34 (stmt)
 
 
-State 71
+State 69
 
    27 stmt: FOR_LOOP OP ID ASSIGN • exp SEMICOLON exp SEMICOLON stmt CP stmt
 
-    NUMBER  shift, and go to state 49
+    NUMBER  shift, and go to state 47
 
     $default  reduce using rule 10 (exp)
 
-    exp          go to state 75
-    int_literal  go to state 51
+    exp          go to state 73
+    int_literal  go to state 49
 
 
-State 72
+State 70
 
    30 stmt: PRINTF OP STRING CP SEMICOLON •
 
     $default  reduce using rule 30 (stmt)
 
 
-State 73
+State 71
 
    24 intern_scope_then: THEN •
 
     $default  reduce using rule 24 (intern_scope_then)
 
 
-State 74
+State 72
 
    28 stmt: IF OP exp CP intern_scope_then • stmt
    29     | IF OP exp CP intern_scope_then • stmt intern_scope_else stmt
 
     BOOL    shift, and go to state 3
-    PRINTF  shift, and go to state 36
-    IF      shift, and go to state 37
-    FOR     shift, and go to state 38
-    RETURN  shift, and go to state 39
+    PRINTF  shift, and go to state 34
+    IF      shift, and go to state 35
+    FOR     shift, and go to state 36
+    RETURN  shift, and go to state 37
     INT     shift, and go to state 6
-    ID      shift, and go to state 40
+    ID      shift, and go to state 38
     STRING  shift, and go to state 8
-    OB      shift, and go to state 41
+    OB      shift, and go to state 39
 
-    type      go to state 42
-    l_exp     go to state 43
-    FOR_LOOP  go to state 44
-    stmt      go to state 76
+    type      go to state 40
+    l_exp     go to state 41
+    FOR_LOOP  go to state 42
+    stmt      go to state 74
 
 
-State 75
+State 73
 
    27 stmt: FOR_LOOP OP ID ASSIGN exp • SEMICOLON exp SEMICOLON stmt CP stmt
 
-    SEMICOLON  shift, and go to state 77
+    SEMICOLON  shift, and go to state 75
 
 
-State 76
+State 74
 
    28 stmt: IF OP exp CP intern_scope_then stmt •
    29     | IF OP exp CP intern_scope_then stmt • intern_scope_else stmt
 
-    ELSE  shift, and go to state 78
+    ELSE  shift, and go to state 76
 
     ELSE      [reduce using rule 28 (stmt)]
     $default  reduce using rule 28 (stmt)
 
-    intern_scope_else  go to state 79
+    intern_scope_else  go to state 77
 
 
-State 77
+State 75
 
    27 stmt: FOR_LOOP OP ID ASSIGN exp SEMICOLON • exp SEMICOLON stmt CP stmt
 
-    NUMBER  shift, and go to state 49
+    NUMBER  shift, and go to state 47
 
     $default  reduce using rule 10 (exp)
 
-    exp          go to state 80
-    int_literal  go to state 51
+    exp          go to state 78
+    int_literal  go to state 49
 
 
-State 78
+State 76
 
    25 intern_scope_else: ELSE •
 
     $default  reduce using rule 25 (intern_scope_else)
 
 
-State 79
+State 77
 
    29 stmt: IF OP exp CP intern_scope_then stmt intern_scope_else • stmt
 
     BOOL    shift, and go to state 3
-    PRINTF  shift, and go to state 36
-    IF      shift, and go to state 37
-    FOR     shift, and go to state 38
-    RETURN  shift, and go to state 39
+    PRINTF  shift, and go to state 34
+    IF      shift, and go to state 35
+    FOR     shift, and go to state 36
+    RETURN  shift, and go to state 37
     INT     shift, and go to state 6
-    ID      shift, and go to state 40
+    ID      shift, and go to state 38
     STRING  shift, and go to state 8
-    OB      shift, and go to state 41
+    OB      shift, and go to state 39
 
-    type      go to state 42
-    l_exp     go to state 43
-    FOR_LOOP  go to state 44
-    stmt      go to state 81
+    type      go to state 40
+    l_exp     go to state 41
+    FOR_LOOP  go to state 42
+    stmt      go to state 79
 
 
-State 80
+State 78
 
    27 stmt: FOR_LOOP OP ID ASSIGN exp SEMICOLON exp • SEMICOLON stmt CP stmt
 
-    SEMICOLON  shift, and go to state 82
+    SEMICOLON  shift, and go to state 80
 
 
-State 81
+State 79
 
    29 stmt: IF OP exp CP intern_scope_then stmt intern_scope_else stmt •
 
     $default  reduce using rule 29 (stmt)
 
 
-State 82
+State 80
 
    27 stmt: FOR_LOOP OP ID ASSIGN exp SEMICOLON exp SEMICOLON • stmt CP stmt
 
     BOOL    shift, and go to state 3
-    PRINTF  shift, and go to state 36
-    IF      shift, and go to state 37
-    FOR     shift, and go to state 38
-    RETURN  shift, and go to state 39
+    PRINTF  shift, and go to state 34
+    IF      shift, and go to state 35
+    FOR     shift, and go to state 36
+    RETURN  shift, and go to state 37
     INT     shift, and go to state 6
-    ID      shift, and go to state 40
+    ID      shift, and go to state 38
     STRING  shift, and go to state 8
-    OB      shift, and go to state 41
+    OB      shift, and go to state 39
 
-    type      go to state 42
-    l_exp     go to state 43
-    FOR_LOOP  go to state 44
-    stmt      go to state 83
+    type      go to state 40
+    l_exp     go to state 41
+    FOR_LOOP  go to state 42
+    stmt      go to state 81
 
 
-State 83
+State 81
 
    27 stmt: FOR_LOOP OP ID ASSIGN exp SEMICOLON exp SEMICOLON stmt • CP stmt
 
-    CP  shift, and go to state 84
+    CP  shift, and go to state 82
 
 
-State 84
+State 82
 
    27 stmt: FOR_LOOP OP ID ASSIGN exp SEMICOLON exp SEMICOLON stmt CP • stmt
 
     BOOL    shift, and go to state 3
-    PRINTF  shift, and go to state 36
-    IF      shift, and go to state 37
-    FOR     shift, and go to state 38
-    RETURN  shift, and go to state 39
+    PRINTF  shift, and go to state 34
+    IF      shift, and go to state 35
+    FOR     shift, and go to state 36
+    RETURN  shift, and go to state 37
     INT     shift, and go to state 6
-    ID      shift, and go to state 40
+    ID      shift, and go to state 38
     STRING  shift, and go to state 8
-    OB      shift, and go to state 41
+    OB      shift, and go to state 39
 
-    type      go to state 42
-    l_exp     go to state 43
-    FOR_LOOP  go to state 44
-    stmt      go to state 85
+    type      go to state 40
+    l_exp     go to state 41
+    FOR_LOOP  go to state 42
+    stmt      go to state 83
 
 
-State 85
+State 83
 
    27 stmt: FOR_LOOP OP ID ASSIGN exp SEMICOLON exp SEMICOLON stmt CP stmt •
 

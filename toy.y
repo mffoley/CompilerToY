@@ -29,7 +29,6 @@
 %token <str> ID;
 %token <val> NUMBER;
 %token STRING COMMENT;
-%token EOL;
 %token EQU LTE GTE NEQ OB CB SEMICOLON NEGATE OP CP;
 %token ADD SUB MUL DIV DOT COMMA ASSIGN LT GT;
 
@@ -44,13 +43,14 @@
 %type <val> stmt;
 %type <val> stmt_seq;
 
+
 %%
 input:	/* empty*/
 	|input line {}
 	;
 
-line: EOL
-	|pgm EOL {}
+line: 
+	|pgm {}
 	;
 
 pgm2: 
@@ -73,7 +73,7 @@ int_literal: NUMBER {$$ = $1;}
 type : INT { $$ = 4; }
  | BOOL { $$ = 5; }
  | STRING { $$ = 6; }
- | ID { printf(" "); if(add_struct_to_scope($1) == 1){ $$ = 7; } else { $$ = 0;}}
+ | ID {}
 ;
 
 declaration: type ID {if($1 != 0) { if(add_to_scope($1, $2) == 1){ $$ = 1; } else { $$ = 0;} } else {$$ = 0;}}

@@ -1,6 +1,15 @@
-struct name { int first, bool last }
-struct employee { int id, bool found }
-int a ( int x, int y, int z ) { int g; g = 4; employee person1; g.id = 4; }
+struct name 
+{ 
+    string first, 
+    bool last 
+}
+struct employee 
+{ 
+    int id, 
+    bool found 
+}
+int a ( int x, int y, int z ) 
+{ int g; g = 4; employee person1; }
 int b ( int x, bool y, int z ) { if (5) then { if (5) then {int h; int g; int i;} } }
 int c ( int g ) { int b; for(g=0; 5; int j;) {printf("hey"); int f;} }
 
