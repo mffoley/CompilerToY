@@ -1,14 +1,14 @@
-/* A Bison parser, made by GNU Bison 3.8.2.  */
+/* A Bison parser, made by GNU Bison 2.3.  */
 
-/* Bison interface for Yacc-like parsers in C
+/* Skeleton interface for Bison's Yacc-like parsers in C
 
-   Copyright (C) 1984, 1989-1990, 2000-2015, 2018-2021 Free Software Foundation,
-   Inc.
+   Copyright (C) 1984, 1989, 1990, 2000, 2001, 2002, 2003, 2004, 2005, 2006
+   Free Software Foundation, Inc.
 
-   This program is free software: you can redistribute it and/or modify
+   This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
-   the Free Software Foundation, either version 3 of the License, or
-   (at your option) any later version.
+   the Free Software Foundation; either version 2, or (at your option)
+   any later version.
 
    This program is distributed in the hope that it will be useful,
    but WITHOUT ANY WARRANTY; without even the implied warranty of
@@ -16,7 +16,9 @@
    GNU General Public License for more details.
 
    You should have received a copy of the GNU General Public License
-   along with this program.  If not, see <https://www.gnu.org/licenses/>.  */
+   along with this program; if not, write to the Free Software
+   Foundation, Inc., 51 Franklin Street, Fifth Floor,
+   Boston, MA 02110-1301, USA.  */
 
 /* As a special exception, you may create a larger work that contains
    part or all of the Bison parser skeleton and distribute that work
@@ -31,94 +33,112 @@
    This special exception was added by the Free Software Foundation in
    version 2.2 of Bison.  */
 
-/* DO NOT RELY ON FEATURES THAT ARE NOT DOCUMENTED in the manual,
-   especially those whose name start with YY_ or yy_.  They are
-   private implementation details that can be changed or removed.  */
-
-#ifndef YY_YY_TOY_TAB_H_INCLUDED
-# define YY_YY_TOY_TAB_H_INCLUDED
-/* Debug traces.  */
-#ifndef YYDEBUG
-# define YYDEBUG 0
-#endif
-#if YYDEBUG
-extern int yydebug;
-#endif
-
-/* Token kinds.  */
+/* Tokens.  */
 #ifndef YYTOKENTYPE
 # define YYTOKENTYPE
-  enum yytokentype
-  {
-    YYEMPTY = -2,
-    YYEOF = 0,                     /* "end of file"  */
-    YYerror = 256,                 /* error  */
-    YYUNDEF = 257,                 /* "invalid token"  */
-    BOOL = 258,                    /* BOOL  */
-    TRUE = 259,                    /* TRUE  */
-    FALSE = 260,                   /* FALSE  */
-    VOID = 261,                    /* VOID  */
-    PRINTF = 262,                  /* PRINTF  */
-    STRUCT = 263,                  /* STRUCT  */
-    IF = 264,                      /* IF  */
-    THEN = 265,                    /* THEN  */
-    ELSE = 266,                    /* ELSE  */
-    FOR = 267,                     /* FOR  */
-    RETURN = 268,                  /* RETURN  */
-    MOD = 269,                     /* MOD  */
-    INT = 270,                     /* INT  */
-    AND = 271,                     /* AND  */
-    OR = 272,                      /* OR  */
-    NOT = 273,                     /* NOT  */
-    ID = 274,                      /* ID  */
-    NUMBER = 275,                  /* NUMBER  */
-    STRING = 276,                  /* STRING  */
-    COMMENT = 277,                 /* COMMENT  */
-    EQU = 278,                     /* EQU  */
-    LTE = 279,                     /* LTE  */
-    GTE = 280,                     /* GTE  */
-    NEQ = 281,                     /* NEQ  */
-    OB = 282,                      /* OB  */
-    CB = 283,                      /* CB  */
-    SEMICOLON = 284,               /* SEMICOLON  */
-    NEGATE = 285,                  /* NEGATE  */
-    OP = 286,                      /* OP  */
-    CP = 287,                      /* CP  */
-    ADD = 288,                     /* ADD  */
-    SUB = 289,                     /* SUB  */
-    MUL = 290,                     /* MUL  */
-    DIV = 291,                     /* DIV  */
-    DOT = 292,                     /* DOT  */
-    COMMA = 293,                   /* COMMA  */
-    ASSIGN = 294,                  /* ASSIGN  */
-    LT = 295,                      /* LT  */
-    GT = 296                       /* GT  */
-  };
-  typedef enum yytokentype yytoken_kind_t;
+   /* Put the tokens into the symbol table, so that GDB and other debuggers
+      know about them.  */
+   enum yytokentype {
+     BOOL = 258,
+     TRUE = 259,
+     FALSE = 260,
+     VOID = 261,
+     PRINTF = 262,
+     STRUCT = 263,
+     IF = 264,
+     THEN = 265,
+     ELSE = 266,
+     FOR = 267,
+     RETURN = 268,
+     MOD = 269,
+     INT = 270,
+     AND = 271,
+     OR = 272,
+     NOT = 273,
+     ID = 274,
+     NUMBER = 275,
+     STRING = 276,
+     COMMENT = 277,
+     EQU = 278,
+     LTE = 279,
+     GTE = 280,
+     NEQ = 281,
+     OB = 282,
+     CB = 283,
+     SEMICOLON = 284,
+     NEGATE = 285,
+     OP = 286,
+     CP = 287,
+     ADD = 288,
+     SUB = 289,
+     MUL = 290,
+     DIV = 291,
+     DOT = 292,
+     COMMA = 293,
+     ASSIGN = 294,
+     LT = 295,
+     GT = 296
+   };
 #endif
+/* Tokens.  */
+#define BOOL 258
+#define TRUE 259
+#define FALSE 260
+#define VOID 261
+#define PRINTF 262
+#define STRUCT 263
+#define IF 264
+#define THEN 265
+#define ELSE 266
+#define FOR 267
+#define RETURN 268
+#define MOD 269
+#define INT 270
+#define AND 271
+#define OR 272
+#define NOT 273
+#define ID 274
+#define NUMBER 275
+#define STRING 276
+#define COMMENT 277
+#define EQU 278
+#define LTE 279
+#define GTE 280
+#define NEQ 281
+#define OB 282
+#define CB 283
+#define SEMICOLON 284
+#define NEGATE 285
+#define OP 286
+#define CP 287
+#define ADD 288
+#define SUB 289
+#define MUL 290
+#define DIV 291
+#define DOT 292
+#define COMMA 293
+#define ASSIGN 294
+#define LT 295
+#define GT 296
 
-/* Value type.  */
+
+
+
 #if ! defined YYSTYPE && ! defined YYSTYPE_IS_DECLARED
-union YYSTYPE
+typedef union YYSTYPE
+#line 22 "toy.y"
 {
-#line 21 "toy.y"
-
   char* str;
   int val;
-
-#line 110 "toy.tab.h"
-
-};
-typedef union YYSTYPE YYSTYPE;
-# define YYSTYPE_IS_TRIVIAL 1
+  Expression *expression;
+}
+/* Line 1529 of yacc.c.  */
+#line 137 "toy.tab.h"
+	YYSTYPE;
+# define yystype YYSTYPE /* obsolescent; will be withdrawn */
 # define YYSTYPE_IS_DECLARED 1
+# define YYSTYPE_IS_TRIVIAL 1
 #endif
-
 
 extern YYSTYPE yylval;
 
-
-int yyparse (void);
-
-
-#endif /* !YY_YY_TOY_TAB_H_INCLUDED  */

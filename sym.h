@@ -7,11 +7,11 @@
 #define PROC 2;
 #define STRUCT_STMT 3;
 
-#define INT_TYPE 4;
-#define BOOL_TYPE 5;
-#define STRING_TYPE 6;
-#define VAR_STRUCT 7;
-#define FIELD_STRUCT 8;
+// #define INT_TYPE 4;
+// #define BOOL_TYPE 5;
+// #define STRING_TYPE 6;
+// #define VAR_STRUCT 7;
+// #define FIELD_STRUCT 8;
 
 typedef struct HashTable HashTable;
 typedef struct items items;
@@ -30,7 +30,7 @@ struct HashTable
   int size;
   int count;
 };
-
+ 
 typedef struct symbol symbol;
 typedef struct table table;
 
@@ -125,6 +125,7 @@ int check_name(char *name)
   }
   return 1;
 }
+
 
 void new_scope()
 {

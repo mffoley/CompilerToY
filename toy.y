@@ -1,4 +1,3 @@
-%define parse.error verbose
 
 %{
   #include <stdio.h>
@@ -9,18 +8,21 @@
   #include <stdlib.h>
   #include <string.h>
   #include "sym.h"
+  #include "ast.h"
 
+  
   int printg(){
     printf("blah");
     return 0;
   }
 
 
-%}
+%} 
 
 %union{
   char* str;
   int val;
+  Expression *expression;
 }
 
 
@@ -38,10 +40,11 @@
 %type <val> proc;
 %type <val> l_exp;
 %type <val> Name;
-%type <val> exp;
 %type <val> int_literal;
 %type <val> stmt;
 %type <val> stmt_seq;
+
+%type <expression> exp;
 
 
 %%
@@ -63,8 +66,9 @@ pgm: proc pgm2 { if($1 == 1){printf("-----------------------------Valid Proc\n")
 ;
 
 
-exp: /* nothing */ { $$ = 1; }
- | int_literal { $$ = $1; }
+exp: /* nothing */ { $$ = NULL; }
+  | exp ADD exp {  $$ = add_expression(4,11,12,NULL,NULL); print($$); }
+ | int_literal { $$ = add_expression(4,14,14,NULL,NULL); }
  ;
 
 int_literal: NUMBER {$$ = $1;} 
@@ -73,7 +77,7 @@ int_literal: NUMBER {$$ = $1;}
 type : INT { $$ = 4; }
  | BOOL { $$ = 5; }
  | STRING { $$ = 6; }
- | ID {}
+ | ID { if(add_struct_to_scope($1) == 1){ $$ = 7; } else { $$ = 0;}}
 ;
 
 declaration: type ID {if($1 != 0) { if(add_to_scope($1, $2) == 1){ $$ = 1; } else { $$ = 0;} } else {$$ = 0;}}
