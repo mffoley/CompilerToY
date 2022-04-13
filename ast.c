@@ -135,14 +135,20 @@ int verify (Expression *node) {
         }
       }
     }
+
+    
   }
+  if (node->exp_type == NEXP){
+      return node->evaluates_to_type;
+    }
   //printf ("Verification failed, returning -1\n\n");
   return -1;
 
 }
 
 int check_compatibility ( int type_expected, Expression *root ) {
-  printf("checking compatibility with type %d and expression (return type evaluated to be %d)\n", type_expected, verify(root));
+  printf("checking compatibility with type %d and expression (return type evaluated to be %d)\nVerifying:\n", type_expected, verify(root));
+  print(root);
   if (verify(root) == type_expected){
     return 1;
   }

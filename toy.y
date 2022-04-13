@@ -121,8 +121,8 @@ struct_ : STRUCT Name OB declaration CB { is_struct(1); new_scope(); if($4 == 1 
 ; 
 
 
-l_exp : ID  { printf("checking scope"); if(check_scope(strtok($1, " =")) == 1) { printf("return &d",return_type(strtok($1, " ="))); } } /* return type, if 0 then invalid */
-| ID DOT l_exp { printf("checking scope"); if((check_scope(strtok($1, ".")) == 1) ) { printf("Is a Struct\n"); } $$=1;}
+l_exp : ID  { printf("checking scope\n"); printf("\ncheck scope response: %d \n",check_scope(strtok($1, " ="))); if(check_scope(strtok($1, " =")) == 1) { printf("return %d\n",return_type(strtok($1, " ="))); $$=return_type(strtok($1, " ="));} } /* return type, if 0 then invalid */
+| ID DOT l_exp { printf("checking scope\n"); if((check_scope(strtok($1, ".")) == 1) ) { printf("Is a Struct\n"); } $$=1;}
 ;
 
 
@@ -134,14 +134,14 @@ intern_scope_else: ELSE { delete_scope(); add_internal_scope(); }
 
 FOR_LOOP: FOR { add_internal_scope(); }
 ;
-stmt : FOR_LOOP OP ID ASSIGN exp SEMICOLON exp SEMICOLON stmt CP stmt { delete_scope(); if(check_scope(strtok($3, " =")) == 1 && $9 == 1 && $11 == 1 && check_compatibility( 5, $5 )==1) { $$ = 1; } else { $$ = 0; } }
+stmt : FOR_LOOP OP ID ASSIGN exp SEMICOLON exp SEMICOLON stmt CP stmt { delete_scope(); if(check_scope(strtok($3, " =")) == 1 && $9 == 1 && $11 == 1 && check_compatibility( 5, $7 )==1 && check_compatibility(return_type($3), $5)) { $$ = 1; } else { $$ = 0; } }
   | IF OP exp CP intern_scope_then stmt { delete_scope();  print($3); if(check_compatibility( 5, $3 )==1){printf("If statement exp is bool\n");}else{printf("If statement exp is NOT bool\n");} if($6 == 0) { $$ = 0; } else { $$ = 1; } }
   | IF OP exp CP intern_scope_then stmt intern_scope_else stmt { delete_scope(); if($6 == 0 || $8 == 0) { $$ = 0; } else { $$ = 1; } }
   | PRINTF OP STRING CP SEMICOLON { $$ = 1; }
   | RETURN exp SEMICOLON  { $$ = 1; }
   | OB stmt_seq CB { $$ = $2; }
   | type ID SEMICOLON { printf("has returned with %d %s\n", $1, $2); if($1 == 0 || add_to_scope($1, $2) == 0) { $$ = 0; } else { $$ = 1; if($1 == 7) {   printf("HEREEEEEEEEEEEEEE");add_struct_name();}} }
-  | l_exp ASSIGN exp SEMICOLON { printf("lexp resp: %d",$1); if( check_compatibility($1, $3) == 1){ $$ = 1; } else { $$ = 0; }}
+  | l_exp ASSIGN exp SEMICOLON { printf("lexp resp: %d\n",$1); if( check_compatibility($1, $3) == 1){ $$ = 1; } else { $$ = 0; }}
 ;
 
 stmt_seq : /* empty */
@@ -151,7 +151,7 @@ stmt_seq : /* empty */
 Name : ID { if(add_name($1) == 1){ $$ = 1; } else {$$ = 0;} }
 ;
 
-proc : return_type Name OP declaration CP OB stmt_seq CB { print_symbol_table(); new_scope(); if($4 == 1 && $2 == 1 && $7 == 1){ $$ = 1; } else {$$ = 0;}}
+proc : return_type Name OP declaration CP OB stmt_seq CB { new_scope(); if($4 == 1 && $2 == 1 && $7 == 1){ $$ = 1; } else {$$ = 0;}}
 ;
 
 %%

@@ -77,6 +77,7 @@ int add_to_scope(int type, char *n)
     printf("THE TYPE IS %d\n", type);
     int index = hash_function(var_name);
     items *n = (items *)malloc(sizeof(items));
+    n->type = (int) malloc(sizeof(int));
     symbol_table->curr->hash_table->items[index] = n;
     n->return_type = NULL;
     n->type = type;
@@ -389,7 +390,6 @@ void add_struct_name()
 int return_type(char* var)
 {
   int index = hash_function(var);
-  printf("after 1\n");
   symbol *temp = symbol_table->curr;
   HashTable *table = temp->hash_table;
 
