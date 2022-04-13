@@ -389,6 +389,7 @@ void add_struct_name()
 int return_type(char* var)
 {
   int index = hash_function(var);
+  printf("after 1\n");
   symbol *temp = symbol_table->curr;
   HashTable *table = temp->hash_table;
 
