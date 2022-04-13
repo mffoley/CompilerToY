@@ -22,6 +22,7 @@ struct items
   int return_type;
   int type;
   char* name_struct;
+  char* field_of;
 };
 
 struct HashTable
@@ -56,7 +57,7 @@ symbol *current = NULL; // current scope
 void *create_symbol_table();
 HashTable *create_hash_table();
 unsigned long hash_function(char *varible);
-char* struct_name = NULL;
+char *struct_name;
 
 int add_to_scope(int type, char *n)
 {
@@ -64,25 +65,31 @@ int add_to_scope(int type, char *n)
   strcpy(name, n);
   char *var_name = strtok(name, ";");
 
+  int scope = check_scope(var_name);
+
   if (symbol_table == NULL)
   {
     create_symbol_table();
   }
 
-  if (check_scope(var_name) == 0)
+  if (scope == 0)
   {
+    printf("THE TYPE IS %d\n", type);
     int index = hash_function(var_name);
     items *n = (items *)malloc(sizeof(items));
+    symbol_table->curr->hash_table->items[index] = n;
     n->return_type = NULL;
     n->type = type;
     n->var = var_name;
-    symbol_table->curr->hash_table->items[index] = n;
+    n->field_of = NULL;
+    n->name_struct= NULL;
+
     // printf("ADDING: %s\n", n->var);
     return 1;
   }
   else
   {
-    // printf("Here with: %s\n", var_name);
+     printf("Here with: %s\n", var_name);
     return 0;
   }
 }
@@ -158,6 +165,7 @@ void *print_symbol_table()
       if (table->items[i] != NULL)
       {
         printf("VAR NAME : %s, VAR TYPE : %d\n", table->items[i]->var, table->items[i]->type);
+        if(table->items[i]->type == 7){ printf("STRUCT NAME : %s\n", table->items[i]->name_struct); }
       }
     }
 
@@ -253,7 +261,6 @@ int check_scope(char *name)
   int index = hash_function(n);
   symbol *temp = symbol_table->curr;
   HashTable *table = temp->hash_table;
-  // printf("hey hey\n");
   if (temp->internal_scope == 1)
   {
     while (temp->internal_scope != 0)
@@ -344,7 +351,9 @@ int check_if_struct(char *name)
 
 void store_struct_name(char* name)
 {
+  struct_name = (char *)malloc(sizeof(char));
   strcpy(struct_name, name);
+  printf("STRUCT NAME = %s\n", struct_name);
   //created a new value in item
   //this should take in the struct name and struct variable
   //search for the variable in the current scope
@@ -386,3 +395,6 @@ int return_type(char* var)
   items *it = table->items[index];
   return it->type;
 }
+
+//declaration of a struct is store with the struct name
+// fields are stored with the declared variable name

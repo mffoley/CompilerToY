@@ -78,7 +78,7 @@ int_literal: NUMBER {$$ = $1;}
 type : INT { $$ = 4; }
  | BOOL { $$ = 5; }
  | STRING { $$ = 6; }
- | ID {store_struct_name($1); $$ = 7; }
+ | ID {store_struct_name(strtok($1, " ")); $$ = 7; }
 ;
 
 declaration: type ID {if($1 != 0) { if(add_to_scope($1, $2) == 1){ $$ = 1; if($1 == 7) {add_struct_name();} } else { $$ = 0;} } else {$$ = 0;}}
@@ -113,8 +113,8 @@ stmt : FOR_LOOP OP ID ASSIGN exp SEMICOLON exp SEMICOLON stmt CP stmt { delete_s
   | PRINTF OP STRING CP SEMICOLON { $$ = 1; }
   | RETURN exp SEMICOLON  { $$ = 1; }
   | OB stmt_seq CB { $$ = $2; }
-  | type ID SEMICOLON { if($1 == 0 || add_to_scope($1, $2) == 0) { $$ = 0; } else { $$ = 1; } }
-  | l_exp ASSIGN exp SEMICOLON { if($1 != 0){ $$ = 1; } else { $$ = 0; }}
+  | type ID SEMICOLON { printf("has returned with %d %s\n", $1, $2); if($1 == 0 || add_to_scope($1, $2) == 0) { $$ = 0; } else { $$ = 1; if($1 == 7) {   printf("HEREEEEEEEEEEEEEE");add_struct_name();}} }
+  | l_exp ASSIGN exp SEMICOLON { printf("THISSSS: %d", $1); if($1 != 0){ $$ = 1; } else { $$ = 0; }}
 ;
 
 stmt_seq : /* empty */
