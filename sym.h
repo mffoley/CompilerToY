@@ -351,8 +351,38 @@ void store_struct_name(char* name)
   // when you find it you should store the struct name with it
 }
 
+//make sure name_struct is null
 void add_struct_name()
 {
   symbol *temp = symbol_table->curr;
+  HashTable *table = temp->hash_table;
+
+  if (table != NULL)
+  {
+    items *item = (items *)malloc(sizeof(items));
+    for (int index = 0; index < table->size; index++)
+    {
+      item = table->items[index];
+      if (item != NULL)
+      {
+        if (item->type == 7 && item->name_struct == NULL)
+        {
+            strcpy(item->name_struct, struct_name);
+            struct_name = NULL;
+            break;
+        }
+      }
+    }
+  }
   
+}
+
+int return_type(char* var)
+{
+  int index = hash_function(var);
+  symbol *temp = symbol_table->curr;
+  HashTable *table = temp->hash_table;
+
+  items *it = table->items[index];
+  return it->type;
 }
