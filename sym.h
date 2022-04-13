@@ -56,6 +56,7 @@ symbol *current = NULL; // current scope
 void *create_symbol_table();
 HashTable *create_hash_table();
 unsigned long hash_function(char *varible);
+char* struct_name = NULL;
 
 int add_to_scope(int type, char *n)
 {
@@ -343,8 +344,15 @@ int check_if_struct(char *name)
 
 void store_struct_name(char* name)
 {
+  strcpy(struct_name, name);
   //created a new value in item
   //this should take in the struct name and struct variable
   //search for the variable in the current scope
   // when you find it you should store the struct name with it
+}
+
+void add_struct_name()
+{
+  symbol *temp = symbol_table->curr;
+  
 }
