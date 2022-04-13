@@ -9,8 +9,9 @@
   #include <string.h>
   #include "sym.h"
   #include "ast.h"
+  #include "ast.c"
 
-  typedef struct Expression Expression;
+
   int printg(){
     printf("blah");
     return 0;
@@ -67,8 +68,8 @@ pgm: proc pgm2 { if($1 == 1){printf("-----------------------------Valid Proc\n")
 
 
 exp: /* nothing */ { $$ = NULL; }
-  | exp ADD exp {  $$ = add_expression(4,11,12,NULL,NULL); print($$); }
- | int_literal { $$ = add_expression(4,14,14,NULL,NULL); }
+  | exp ADD exp {  printf("ADD\n");$$ = add_expression(4,11,12,$1,$3); print($$); check_compatibility(4,$$); }
+ | int_literal { printf("INT\n");$$ = add_expression(4,14,14,NULL,NULL); }
  ;
 
 int_literal: NUMBER {$$ = $1;} 
@@ -104,7 +105,7 @@ intern_scope_else: ELSE { delete_scope(); add_internal_scope(); }
 FOR_LOOP: FOR { add_internal_scope(); }
 ;
 stmt : FOR_LOOP OP ID ASSIGN exp SEMICOLON exp SEMICOLON stmt CP stmt { delete_scope(); if(check_scope(strtok($3, " =")) == 1 && $9 == 1 && $11 == 1) { $$ = 1; } else { $$ = 0; } }
-  | IF OP exp CP intern_scope_then stmt { delete_scope(); if($6 == 0) { $$ = 0; } else { $$ = 1; } }
+  | IF OP exp CP intern_scope_then stmt { delete_scope(); if(check_compatibility(5,$3)){printf("If statement exp is bool\n")}else{printf("If statement exp is NOT bool\n")} if($6 == 0) { $$ = 0; } else { $$ = 1; } }
   | IF OP exp CP intern_scope_then stmt intern_scope_else stmt { delete_scope(); if($6 == 0 || $8 == 0) { $$ = 0; } else { $$ = 1; } }
   | PRINTF OP STRING CP SEMICOLON { $$ = 1; }
   | RETURN exp SEMICOLON  { $$ = 1; }
