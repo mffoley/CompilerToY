@@ -10,7 +10,7 @@
   #include "sym.h"
   #include "ast.h"
 
-  
+  typedef struct Expression Expression;
   int printg(){
     printf("blah");
     return 0;
@@ -125,7 +125,7 @@ proc : return_type Name OP declaration CP OB stmt_seq CB { print_symbol_table();
 
 %%
 
-main()
+ main()
 {
     extern FILE *yyin, yyout;
     
