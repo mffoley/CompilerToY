@@ -392,10 +392,40 @@ int return_type(char* var)
   int index = hash_function(var);
   symbol *temp = symbol_table->curr;
   HashTable *table = temp->hash_table;
-
-  items *it = table->items[index];
-  return it->type;
+  if (temp->internal_scope == 1)
+  {
+    while (temp->internal_scope != 0)
+    {
+      HashTable *table = temp->hash_table;
+      if (table != NULL)
+      {
+        items *item = (items *)malloc(sizeof(items));
+        item = table->items[index];
+        if (item != NULL)
+        {
+          return item->type;
+        }
+      }
+      temp = temp->prev;
+    }
+  }
+  // checking outer scope
+  table = temp->hash_table;
+  if (table != NULL)
+  {
+    items *item = (items *)malloc(sizeof(items));
+    item = table->items[index];
+    if (item != NULL)
+    {
+      // printf("Variable in outer scope: %s\n", name);
+      //  if (strcmp(item->var, n) == 0)
+      return item->type;
+    }
+  }
+  // printf("Variable not in scope\n");
+  return 0;
 }
+
 
 //declaration of a struct is store with the struct name
 // fields are stored with the declared variable name

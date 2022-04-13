@@ -71,7 +71,7 @@ pgm: proc pgm2 { if($1 == 1){printf("-----------------------------Valid Proc\n")
 
 
 exp: /* nothing */ { $$ = NULL; }
-  | OP exp CP {$$ = $2}
+  | OP exp CP {$$ = $2; }
   | exp binary_maths_op exp       { $$ = add_expression(4,11,12,$1,$3); }
   | exp binary_boolean_op_r exp   { $$ = add_expression(5,10,12,$1,$3); }
   | exp binary_boolean_op_nr exp  { $$ = add_expression(5,10,12,$1,$3); }
@@ -121,7 +121,7 @@ struct_ : STRUCT Name OB declaration CB { is_struct(1); new_scope(); if($4 == 1 
 ; 
 
 
-l_exp : ID  { printf("checking scope\n"); printf("\ncheck scope response: %d \n",check_scope(strtok($1, " ="))); if(check_scope(strtok($1, " =")) == 1) { printf("return %d\n",return_type(strtok($1, " ="))); $$=return_type(strtok($1, " ="));} } /* return type, if 0 then invalid */
+l_exp : ID  { printf("checking scope %s\n",$1); printf("\ncheck scope response: %d \n",check_scope(strtok($1, " ="))); if(check_scope(strtok($1, " =")) == 1) { printf("return %d\n",return_type(strtok($1, " ="))); $$=return_type(strtok($1, " ="));} } /* return type, if 0 then invalid */
 | ID DOT l_exp { printf("checking scope\n"); if((check_scope(strtok($1, ".")) == 1) ) { printf("Is a Struct\n"); } $$=1;}
 ;
 
@@ -141,7 +141,7 @@ stmt : FOR_LOOP OP ID ASSIGN exp SEMICOLON exp SEMICOLON stmt CP stmt { delete_s
   | RETURN exp SEMICOLON  { $$ = 1; }
   | OB stmt_seq CB { $$ = $2; }
   | type ID SEMICOLON { printf("has returned with %d %s\n", $1, $2); if($1 == 0 || add_to_scope($1, $2) == 0) { $$ = 0; } else { $$ = 1; if($1 == 7) {   printf("HEREEEEEEEEEEEEEE");add_struct_name();}} }
-  | l_exp ASSIGN exp SEMICOLON { printf("lexp resp: %d\n",$1); if( check_compatibility($1, $3) == 1){ $$ = 1; } else { $$ = 0; }}
+  | l_exp ASSIGN exp SEMICOLON {  if( check_compatibility($1, $3) == 1){ $$ = 1; } else { $$ = 0; }}
 ;
 
 stmt_seq : /* empty */
