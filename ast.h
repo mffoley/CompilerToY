@@ -1,19 +1,28 @@
 #include <stdio.h>
 #include <string.h>
 
-int INT_TYPE = 4;
-int BOOL_TYPE = 5;
-int STRING_TYPE = 6;
-int VAR_STRUCT = 7;
-int FIELD_STRUCT = 8;
+extern int INT_TYPE = 4;
+extern int BOOL_TYPE = 5;
+extern int STRING_TYPE = 6;
+extern int VAR_STRUCT = 7;
+extern int FIELD_STRUCT = 8;
 
-int COMP_OP_R = 9;  // Comparison op (Restrictive)
-int COMP_OP_NR = 10;  // Comparison op (Not Restrictive)
-int M_OP = 11;    // Maths op
+extern int COMP_OP_R = 9;  // Comparison op (Restrictive)
+extern int COMP_OP_NR = 10;  // Comparison op (Not Restrictive)
+extern int M_OP = 11;    // Maths op
 
-int BEXP = 12;  // Binary op
-int UEXP = 13;  // Unary op
-int NEXP = 14;  // Not an op
+extern int BEXP = 12;  // Binary op
+extern int UEXP = 13;  // Unary op
+extern int NEXP = 14;  // Not an op
+
+
+struct Expression {
+  int evaluates_to_type;
+  int op;
+  int exp_type;
+  struct Expression *lexp;
+  struct Expression *rexp;
+};
 
 typedef struct Expression Expression;
 
@@ -29,18 +38,18 @@ typedef struct Expression Expression;
 
 // Assignment not handled in here
 
-struct Expression {
-  int evaluates_to_type;
-  int op;
-  int exp_type;
-  Expression *lexp;
-  Expression *rexp;
-};
+Expression* add_expression (int type, int op, int exp, Expression *lexp, Expression *rexp);
+void print (Expression *node);
+void printtree (int indent, Expression *exp);
+int *verify (Expression *node);
+
+int *check_compatibility ( int type_expected, Expression *root );
 
 
-Expression *add_expression (int type, int op, int exp, Expression *lexp, Expression *rexp) {
 
-  Expression *next_expression = (Expression *)malloc(sizeof(Expression));
+Expression* add_expression (int type, int op, int exp, Expression *lexp, Expression *rexp) {
+
+  Expression* next_expression = (Expression *)malloc(sizeof(Expression));
   next_expression->evaluates_to_type = type;
   next_expression->exp_type = exp;
   next_expression->op = op;
