@@ -33,7 +33,8 @@
   yylval.val = atoi(yytext);
   return NUMBER;}
 
-["][^\\"]*["] {return STRING;}
+["][^\\"]*["] {return STRING_LITERAL;}
+
 
 
 "=="  {return EQU;}
@@ -56,7 +57,7 @@
 "<"   {return LT;}
 ">"   {return GT;}
 
-(\/\/|##).*\n {return COMMENT;}
+(\/\/|##).*\n {}
 
 [ \n\t]+ { }
 

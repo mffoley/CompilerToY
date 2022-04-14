@@ -31,7 +31,7 @@
 %token AND OR NOT;
 %token <str> ID;
 %token <val> NUMBER;
-%token STRING COMMENT;
+%token STRING COMMENT STRING_LITERAL;
 %token EQU LTE GTE NEQ OB CB SEMICOLON NEGATE OP CP;
 %token ADD SUB MUL DIV DOT COMMA ASSIGN LT GT;
 
@@ -42,6 +42,8 @@
 %type <val> l_exp;
 %type <val> Name;
 %type <val> int_literal;
+%type <val> string_literal;
+%type <val> bool_literal;
 %type <val> stmt;
 %type <val> stmt_seq;
 %type <val> binary_maths_op;
@@ -76,10 +78,18 @@ exp: /* nothing */ { $$ = NULL; }
   | exp binary_boolean_op_r exp   { $$ = add_expression(5,10,12,$1,$3); }
   | exp binary_boolean_op_nr exp  { $$ = add_expression(5,10,12,$1,$3); }
   | int_literal                   { $$ = add_expression(4,14,14,NULL,NULL); }
+  | string_literal                { $$ = add_expression(6,14,14,NULL,NULL); }
+  | bool_literal                  { $$ = add_expression(5,14,14,NULL,NULL); }
   | ID                            { $$ = add_expression(return_type($1),14,14,NULL,NULL); }
  ;
 
 int_literal: NUMBER {$$ = $1;} 
+;
+
+string_literal: STRING_LITERAL {$$ = 1;}
+;
+
+bool_literal: TRUE {$$ = 1;}| FALSE {$$ = 1;}
 ;
 
 binary_maths_op: ADD {$$ = 1;} 
@@ -135,9 +145,10 @@ intern_scope_else: ELSE { delete_scope(); add_internal_scope(); }
 FOR_LOOP: FOR { add_internal_scope(); }
 ;
 stmt : FOR_LOOP OP ID ASSIGN exp SEMICOLON exp SEMICOLON stmt CP stmt { delete_scope(); if(check_scope(strtok($3, " =")) == 1 && $9 == 1 && $11 == 1 && check_compatibility( 5, $7 )==1 && check_compatibility(return_type($3), $5)) { $$ = 1; } else { $$ = 0; } }
+  | FOR_LOOP OP  SEMICOLON exp SEMICOLON stmt CP stmt { delete_scope(); if( $6 == 1 && $8 == 1 && check_compatibility( 5, $4 )==1 ) { $$ = 1; } else { $$ = 0; } }
   | IF OP exp CP intern_scope_then stmt { delete_scope();  print($3); if(check_compatibility( 5, $3 )==1){printf("If statement exp is bool\n");}else{printf("If statement exp is NOT bool\n");} if($6 == 0) { $$ = 0; } else { $$ = 1; } }
-  | IF OP exp CP intern_scope_then stmt intern_scope_else stmt { delete_scope(); if($6 == 0 || $8 == 0) { $$ = 0; } else { $$ = 1; } }
-  | PRINTF OP STRING CP SEMICOLON { $$ = 1; }
+  | IF OP exp CP intern_scope_then stmt intern_scope_else stmt { delete_scope(); if($6 == 0 || $8 == 0 || check_compatibility( 5, $3 )==0) { $$ = 0; } else { $$ = 1; } }
+  | PRINTF OP exp CP SEMICOLON { $$ = check_compatibility(6,$3); }
   | RETURN exp SEMICOLON  { $$ = 1; }
   | OB stmt_seq CB { $$ = $2; }
   | type ID SEMICOLON { printf("has returned with %d %s\n", $1, $2); if($1 == 0 || add_to_scope($1, $2) == 0) { $$ = 0; } else { $$ = 1; if($1 == 7) {   printf("HEREEEEEEEEEEEEEE");add_struct_name();}} }
@@ -160,7 +171,7 @@ proc : return_type Name OP declaration CP OB stmt_seq CB { new_scope(); if($4 ==
 {
     extern FILE *yyin, yyout;
     
-    yyin = fopen("Input.txt", "r");
+    yyin = fopen("Test1.txt", "r");
 
     int parse = yyparse();
     // if(parse == 0) printf ("Error\n");

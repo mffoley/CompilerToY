@@ -1,0 +1,12 @@
+int c ( int g ) { 
+  //comment
+  int b; 
+  for(g=0; 5>7; int j;) 
+    {printf("hey"); int f;} 
+  string i;
+  printf(i);
+}
+
+   
+  //comment
+  
