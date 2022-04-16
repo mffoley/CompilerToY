@@ -49,6 +49,7 @@
 %type <val> binary_maths_op;
 %type <val> binary_boolean_op_r;
 %type <val> binary_boolean_op_nr;
+%type <val> return_type;
 
 %type <expression> exp;
 
@@ -59,7 +60,7 @@ input:	/* empty*/
 	;
 
 line: 
-	|pgm {}
+	|pgm { print_symbol_table();}
 	;
 
 pgm2: 
@@ -100,7 +101,6 @@ binary_maths_op: ADD {$$ = 1;}
   ;
 
   
-  
 binary_boolean_op_r: LTE {$$ = 1;} 
   | GTE {$$ = 1;} 
   | LT {$$ = 1;} 
@@ -118,21 +118,22 @@ type : INT { $$ = 4; }
  | ID {store_struct_name(strtok($1, " ")); $$ = 7; }
 ;
 
-declaration: type ID {if($1 != 0) { if(add_to_scope($1, $2) == 1){ $$ = 1; if($1 == 7) {add_struct_name();} } else { $$ = 0;} } else {$$ = 0;}}
+declaration: type ID {if($1 != 0) { if(add_to_scope($1, $2) == 1){ $$ = 1; if($1 == 7) {add_struct_name(); add_struct_to_scope(strtok($2, ";")); struct_name = NULL;} } else { $$ = 0;} } else {$$ = 0;}}
 | declaration COMMA declaration { if($1 == 0 || $3 == 0) { $$ = 0; } else {$$ = 1;}  } 
 ;
 
 
 
-return_type : type | VOID 
+return_type : type {store_return_type($1); $$ = $1;  }
+| VOID { store_return_type(1);  $$ = 1;}
 ;
 
 struct_ : STRUCT Name OB declaration CB { is_struct(1); new_scope(); if($4 == 1 && $2 == 1){ $$ = 1; } else {$$ = 0;}  } 
 ; 
 
 
-l_exp : ID  { printf("checking scope %s\n",$1); printf("\ncheck scope response: %d \n",check_scope(strtok($1, " ="))); if(check_scope(strtok($1, " =")) == 1) { printf("return %d\n",return_type(strtok($1, " ="))); $$=return_type(strtok($1, " ="));} } /* return type, if 0 then invalid */
-| ID DOT l_exp { printf("checking scope\n"); if((check_scope(strtok($1, ".")) == 1) ) { printf("Is a Struct\n"); } $$=1;}
+l_exp : ID  { printf("ORDER: %s\n", $1); if(check_scope(strtok($1, " =")) == 1) { int type_number = return_type(strtok($1, " =")); if(type_number == 7) { $$ = 0;} else { printf("Type number : %d\n", type_number); $$ = type_number;} }} /* return type, if 0 then invalid */
+| ID DOT l_exp { if (check_if_field($1) != 0) { $$=$3;} else { $$ = 0; }}
 ;
 
 
@@ -151,8 +152,8 @@ stmt : FOR_LOOP OP ID ASSIGN exp SEMICOLON exp SEMICOLON stmt CP stmt { delete_s
   | PRINTF OP exp CP SEMICOLON { $$ = check_compatibility(6,$3); }
   | RETURN exp SEMICOLON  { $$ = 1; }
   | OB stmt_seq CB { $$ = $2; }
-  | type ID SEMICOLON { printf("has returned with %d %s\n", $1, $2); if($1 == 0 || add_to_scope($1, $2) == 0) { $$ = 0; } else { $$ = 1; if($1 == 7) {   printf("HEREEEEEEEEEEEEEE");add_struct_name();}} }
-  | l_exp ASSIGN exp SEMICOLON {  if( check_compatibility($1, $3) == 1){ $$ = 1; } else { $$ = 0; }}
+  | type ID SEMICOLON { printf("has returned with %d %s\n", $1, $2); if($1 == 0 || add_to_scope($1, $2) == 0) {  $$ = 0; } else {  $$ = 1; }  if($1 == 7) { printf("hey hey \n"); printf("HEREEEEEEEEEEEEEE\n"); add_struct_name(); printf("finished adding a_struct"); add_struct_to_scope(strtok($2, ";"));  }}
+  | l_exp ASSIGN exp SEMICOLON { printf("What are we returning %d", $1); if( check_compatibility($1, $3) == 1 && ($1 != 0) ) { $$ = 1; } else { $$ = 0; }}
 ;
 
 stmt_seq : /* empty */
@@ -162,7 +163,7 @@ stmt_seq : /* empty */
 Name : ID { if(add_name($1) == 1){ $$ = 1; } else {$$ = 0;} }
 ;
 
-proc : return_type Name OP declaration CP OB stmt_seq CB { new_scope(); if($4 == 1 && $2 == 1 && $7 == 1){ $$ = 1; } else {$$ = 0;}}
+proc : return_type Name OP declaration CP OB stmt_seq CB {new_scope(); if($4 == 1 && $2 == 1 && $7 == 1){ $$ = 1; } else {$$ = 0;}}
 ;
 
 %%
