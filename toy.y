@@ -10,6 +10,7 @@
   #include "sym.h"
   #include "ast.h"
   #include "ast.c"
+  #include "sym.c"
 
 
   int printg(){
@@ -172,7 +173,7 @@ proc : return_type Name OP declaration CP OB stmt_seq CB {new_scope(); if($4 == 
 {
     extern FILE *yyin, yyout;
     
-    yyin = fopen("Test1.txt", "r");
+    yyin = fopen("Input.txt", "r");
 
     int parse = yyparse();
     // if(parse == 0) printf ("Error\n");
