@@ -357,6 +357,7 @@ ExpType* return_type(char *var)
         item = table->items[index];
         if (item != NULL)
         {
+          printf("\nfound the rettype: %d\n", item->type);
           if (item->type==7){
             rettype->sname = item->name_struct;
           }
@@ -375,6 +376,7 @@ ExpType* return_type(char *var)
     item = table->items[index];
     if (item != NULL)
     {
+      printf("\nfound the rettype: %d\n", item->type);
       if (item->type==7){
             rettype->sname = item->name_struct;
           }
@@ -483,9 +485,12 @@ void store_return_type(int type)
 
 ExpType* get_return_type_current_proc()
 {
+  printf("trying to get curr rettype\n");
   ExpType* rettype = (ExpType *)malloc(sizeof(ExpType));
+
   rettype->type = symbol_table->curr->return_type;
   rettype->sname = symbol_table->curr->name;
+  printf ("the expression type of the current proc is %d , %s \n",rettype->type,rettype->sname);
   return rettype;
 }
 
@@ -502,4 +507,5 @@ int get_return_type_of_a_proc(char *name)
     sym = sym->next;
   }
   printf("\ndid not find the proc\n");
+  return -1;
 }
