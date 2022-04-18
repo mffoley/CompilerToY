@@ -1,0 +1,11 @@
+struct structure {
+  bool j
+}
+
+string h ( int g ) {
+  bool i ;
+  structure s;
+  string k;
+  k = h ( s );
+  return k ;
+}

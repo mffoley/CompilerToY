@@ -171,8 +171,8 @@ int verify (Expression *node) {
 // Pass in null to start, returns the return type of the thing below it
 ExpType* verify_dyn (Expression *node) {
   // Do all verification steps - work to bottom of all expressions until two literals, work back up 
-  printf("Verifying:\n");
-  print(node);
+  //printf("Verifying:\n");
+  //print(node);
   ExpType* ret = (ExpType *)malloc(sizeof(ExpType));
   ExpType* left_verif = (ExpType *)malloc(sizeof(ExpType));
   ExpType* right_verif = (ExpType *)malloc(sizeof(ExpType));
@@ -274,16 +274,18 @@ int check_compatibility ( int type_expected, Expression *root ) {
 }
 
 int check_compatibility_dyn ( ExpType *type_expected, Expression *root, int overridesname) {
-  //printf("checking compatibility with type %d and expression (return type evaluated to be %d)\nVerifying:\n", type_expected, verify(root));
-  //print(root);
-  printf ("\ndynamic compatibility checking \n");
+  printf("checking compatibility with type %d and expression (return type evaluated to be %d)\nVerifying:\n", type_expected->type, verify_dyn(root)->type);
+  print(root);
+  //printf ("\ndynamic compatibility checking \n");
   ExpType* ret = (ExpType *)malloc(sizeof(ExpType));
   ret = verify_dyn(root);
-  printf ("\nActual type is: %d , %s \n",ret->type,ret->sname);
-  printf ("\nExpected type is: %d , %s\n",type_expected->type, type_expected->sname);
+  //printf ("\nActual type is: %d , %s \n",ret->type,ret->sname);
+  //printf ("\nExpected type is: %d , %s\n",type_expected->type, type_expected->sname);
   if ( (ret->type == type_expected->type ) && ((type_expected->type == 7 && (strcmp( type_expected->sname, ret->sname) == 0 || overridesname == 1)) || type_expected->type != 7)){
+    printf("returning 1\n");
     return 1;
   }
+  printf("returning 0\n");
   return 0;
   // use the verify command, get the return type of the tree root
 }
