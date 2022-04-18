@@ -1,0 +1,6 @@
+
+//valid, demonstrates the use of a void proc
+
+void main ( int g ) { 
+  main(g);
+}

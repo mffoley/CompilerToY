@@ -1,5 +1,5 @@
 
-//valid
+//comment outside of proc
    
 struct structure {
   // this is a comment in a struct

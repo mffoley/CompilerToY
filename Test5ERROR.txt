@@ -1,0 +1,14 @@
+
+//error, demonstrates boolean check in for loop expression
+   
+struct structure {
+  // this is a comment in a struct
+  int j
+}
+
+void main ( int g ) { 
+  int p;
+  for (; g+25-9*g ; g = 6){
+    p = p + 1;
+  }
+}

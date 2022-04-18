@@ -1,0 +1,19 @@
+
+//error, demonstrates type checking that uses the ID to compare types
+   
+struct structure {
+  // this is a comment in a struct
+  int j
+}
+struct structure2 {
+  // this is a comment in a struct
+  int j
+}
+
+void main ( int g ) { 
+  structure a;
+  structure2 b;
+  a = b;
+  //comment in proc
+}
+

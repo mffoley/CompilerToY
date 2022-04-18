@@ -182,6 +182,7 @@ stmt : FOR_LOOP OP ID ASSIGN exp SEMICOLON exp SEMICOLON stmt CP stmt { delete_s
   | PRINTF OP exp CP SEMICOLON { $$ = check_compatibility(6,$3); }
   | RETURN exp SEMICOLON  {ExpType* r = get_return_type_current_proc();  $$ = check_compatibility_dyn(r,$2, 1); }
   | OB stmt_seq CB { $$ = $2; }
+  | ID OP declaration_check CP { if (get_return_type_of_a_proc($1) == 1){$$ = 1;}else{$$=0;} }
   | type ID SEMICOLON {  if($1 == 0 || add_to_scope($1, $2) == 0) {  $$ = 0; } else {  $$ = 1; }  if($1 == 7) { add_struct_name();  add_struct_to_scope($2);  }}
   | l_exp ASSIGN exp SEMICOLON { if( check_compatibility_dyn($1, $3, 0) == 1 && ($1 != 0) ) { $$ = 1; } else { $$ = 0; }}
 ;
@@ -202,9 +203,10 @@ proc : return_type Name OP declaration CP OB stmt_seq CB {new_scope(); if($4 == 
 {
     extern FILE *yyin, yyout;
     
-    yyin = fopen("Test3.txt", "r");
+    yyin = fopen("Test6VALID.txt", "r");
 
     int parse = yyparse();
+    printf("valid: %d\nerror: %d\n", valid, error);
     if(valid == 0 || error == 0) printf ("Error\n");
     else printf("\nValid\n\n");
 }
