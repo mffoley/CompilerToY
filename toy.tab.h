@@ -59,25 +59,26 @@
      NUMBER = 275,
      STRING = 276,
      COMMENT = 277,
-     EQU = 278,
-     LTE = 279,
-     GTE = 280,
-     NEQ = 281,
-     OB = 282,
-     CB = 283,
-     SEMICOLON = 284,
-     NEGATE = 285,
-     OP = 286,
-     CP = 287,
-     ADD = 288,
-     SUB = 289,
-     MUL = 290,
-     DIV = 291,
-     DOT = 292,
-     COMMA = 293,
-     ASSIGN = 294,
-     LT = 295,
-     GT = 296
+     STRING_LITERAL = 278,
+     EQU = 279,
+     LTE = 280,
+     GTE = 281,
+     NEQ = 282,
+     OB = 283,
+     CB = 284,
+     SEMICOLON = 285,
+     NEGATE = 286,
+     OP = 287,
+     CP = 288,
+     ADD = 289,
+     SUB = 290,
+     MUL = 291,
+     DIV = 292,
+     DOT = 293,
+     COMMA = 294,
+     ASSIGN = 295,
+     LT = 296,
+     GT = 297
    };
 #endif
 /* Tokens.  */
@@ -101,25 +102,26 @@
 #define NUMBER 275
 #define STRING 276
 #define COMMENT 277
-#define EQU 278
-#define LTE 279
-#define GTE 280
-#define NEQ 281
-#define OB 282
-#define CB 283
-#define SEMICOLON 284
-#define NEGATE 285
-#define OP 286
-#define CP 287
-#define ADD 288
-#define SUB 289
-#define MUL 290
-#define DIV 291
-#define DOT 292
-#define COMMA 293
-#define ASSIGN 294
-#define LT 295
-#define GT 296
+#define STRING_LITERAL 278
+#define EQU 279
+#define LTE 280
+#define GTE 281
+#define NEQ 282
+#define OB 283
+#define CB 284
+#define SEMICOLON 285
+#define NEGATE 286
+#define OP 287
+#define CP 288
+#define ADD 289
+#define SUB 290
+#define MUL 291
+#define DIV 292
+#define DOT 293
+#define COMMA 294
+#define ASSIGN 295
+#define LT 296
+#define GT 297
 
 
 
@@ -133,7 +135,7 @@ typedef union YYSTYPE
   Expression *expression;
 }
 /* Line 1529 of yacc.c.  */
-#line 137 "toy.tab.h"
+#line 139 "toy.tab.h"
 	YYSTYPE;
 # define yystype YYSTYPE /* obsolescent; will be withdrawn */
 # define YYSTYPE_IS_DECLARED 1

@@ -147,8 +147,8 @@ int verify (Expression *node) {
 }
 
 int check_compatibility ( int type_expected, Expression *root ) {
-  printf("checking compatibility with type %d and expression (return type evaluated to be %d)\nVerifying:\n", type_expected, verify(root));
-  print(root);
+  //printf("checking compatibility with type %d and expression (return type evaluated to be %d)\nVerifying:\n", type_expected, verify(root));
+  //print(root);
   if (verify(root) == type_expected){
     return 1;
   }

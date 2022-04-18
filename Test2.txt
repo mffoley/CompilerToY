@@ -1,0 +1,9 @@
+int tester ( ) { 
+  int b;  
+  int c;
+  int d;
+  b = -32768; // min int
+  c = 32767; // max int
+  d = b * c;
+  return d;
+}

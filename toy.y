@@ -25,6 +25,7 @@
   char* str;
   int val;
   Expression *expression;
+  int types[15];
 }
 
 
@@ -54,6 +55,8 @@
 
 %type <expression> exp;
 
+%type <val> declaration_check;
+
 
 %%
 input:	/* empty*/
@@ -82,10 +85,11 @@ exp: /* nothing */ { $$ = NULL; }
   | int_literal                   { $$ = add_expression(4,14,14,NULL,NULL); }
   | string_literal                { $$ = add_expression(6,14,14,NULL,NULL); }
   | bool_literal                  { $$ = add_expression(5,14,14,NULL,NULL); }
+  | ID OP declaration_check CP    { printf("\nthis proc returns type %d\n",get_return_type_of_a_proc($1));$$ = add_expression(get_return_type_of_a_proc($1),14,14,NULL,NULL); }
   | ID                            { $$ = add_expression(return_type($1),14,14,NULL,NULL); }
  ;
 
-int_literal: NUMBER {$$ = $1;} 
+int_literal: NUMBER {if($1 >= 32768 || $1 < -32768 ) {printf("too big int");$$ = 0;} else{$$ = 1;}} 
 ;
 
 string_literal: STRING_LITERAL {$$ = 1;}
@@ -124,6 +128,11 @@ declaration: type ID {if($1 != 0) { if(add_to_scope($1, $2) == 1){ $$ = 1; if($1
 ;
 
 
+declaration_check: exp { /* if($1 != NULL) { int v; v = verify($1); $$ = {v};}else{$$={ -1 };} $$ = int[15]*/ $$=1;}
+| declaration_check COMMA exp { /* $$ = int[sizeof $1 + 1]; for (int x = 0; x < sizeof $1; x+=1) {$$[x] = $1[x];} if($3 != NULL) {int v; v = verify($3); $$[sizeof $$ - 1];} $$=int[15]; */ $$=1;}
+  
+;
+
 
 return_type : type {store_return_type($1); $$ = $1;  }
 | VOID { store_return_type(1);  $$ = 1;}
@@ -153,8 +162,8 @@ stmt : FOR_LOOP OP ID ASSIGN exp SEMICOLON exp SEMICOLON stmt CP stmt { delete_s
   | PRINTF OP exp CP SEMICOLON { $$ = check_compatibility(6,$3); }
   | RETURN exp SEMICOLON  { $$ = 1; }
   | OB stmt_seq CB { $$ = $2; }
-  | type ID SEMICOLON { printf("has returned with %d %s\n", $1, $2); if($1 == 0 || add_to_scope($1, $2) == 0) {  $$ = 0; } else {  $$ = 1; }  if($1 == 7) { printf("hey hey \n"); printf("HEREEEEEEEEEEEEEE\n"); add_struct_name(); printf("finished adding a_struct"); add_struct_to_scope(strtok($2, ";"));  }}
-  | l_exp ASSIGN exp SEMICOLON { printf("What are we returning %d", $1); if( check_compatibility($1, $3) == 1 && ($1 != 0) ) { $$ = 1; } else { $$ = 0; }}
+  | type ID SEMICOLON { /*printf("has returned with %d %s\n", $1, $2);*/ if($1 == 0 || add_to_scope($1, $2) == 0) {  $$ = 0; } else {  $$ = 1; }  if($1 == 7) { printf("hey hey \n"); printf("HEREEEEEEEEEEEEEE\n"); add_struct_name(); printf("finished adding a_struct"); add_struct_to_scope(strtok($2, ";"));  }}
+  | l_exp ASSIGN exp SEMICOLON { /*printf("What are we returning %d\n", $1);*/ if( check_compatibility($1, $3) == 1 && ($1 != 0) ) { $$ = 1; } else { $$ = 0; }}
 ;
 
 stmt_seq : /* empty */
@@ -173,7 +182,7 @@ proc : return_type Name OP declaration CP OB stmt_seq CB {new_scope(); if($4 == 
 {
     extern FILE *yyin, yyout;
     
-    yyin = fopen("Input.txt", "r");
+    yyin = fopen("Test1.txt", "r");
 
     int parse = yyparse();
     // if(parse == 0) printf ("Error\n");

@@ -1,12 +1,22 @@
-int c ( int g ) { 
-  //comment
-  int b; 
-  for(g=0; 5>7; int j;) 
-    {printf("hey"); int f;} 
-  string i;
-  printf(i);
+
+//comment outside of proc
+   
+struct structure {
+  // this is a comment in a struct
+  int j
 }
 
-   
-  //comment
-  
+int h ( int g ) { 
+  //comment test
+  for(g=0; 5>7; g = 1;) 
+  {
+    printf("hey"); //end of line comment
+    //comment in for loop
+  }
+  //comment in proc
+}
+
+int b (int l) {
+  int y;
+  y = h (4);
+}

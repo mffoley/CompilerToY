@@ -484,8 +484,10 @@ int get_return_type_of_a_proc(char *name)
   {
     if ((strcmp(sym->name, name) == 0) && sym->is_struct == 0)
     {
+      printf("\n\nreturn type is %d\n",sym->return_type);
       return sym->return_type;
     }
     sym = sym->next;
   }
+  printf("\ndid not find the proc\n");
 }

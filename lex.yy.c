@@ -892,118 +892,118 @@ case 20:
 /* rule 20 can match eol */
 YY_RULE_SETUP
 #line 36 "toy.l"
-{return STRING;}
+{return STRING_LITERAL;}
 	YY_BREAK
 case 21:
 YY_RULE_SETUP
-#line 39 "toy.l"
+#line 40 "toy.l"
 {return EQU;}
 	YY_BREAK
 case 22:
 YY_RULE_SETUP
-#line 40 "toy.l"
+#line 41 "toy.l"
 {return LTE;}
 	YY_BREAK
 case 23:
 YY_RULE_SETUP
-#line 41 "toy.l"
+#line 42 "toy.l"
 {return GTE;}
 	YY_BREAK
 case 24:
 YY_RULE_SETUP
-#line 42 "toy.l"
+#line 43 "toy.l"
 {return NEQ;}
 	YY_BREAK
 case 25:
 YY_RULE_SETUP
-#line 43 "toy.l"
+#line 44 "toy.l"
 {return OB;}
 	YY_BREAK
 case 26:
 YY_RULE_SETUP
-#line 44 "toy.l"
+#line 45 "toy.l"
 {return CB;}
 	YY_BREAK
 case 27:
 YY_RULE_SETUP
-#line 45 "toy.l"
+#line 46 "toy.l"
 {return SEMICOLON;}
 	YY_BREAK
 case 28:
 YY_RULE_SETUP
-#line 46 "toy.l"
+#line 47 "toy.l"
 {return NEGATE;}
 	YY_BREAK
 case 29:
 YY_RULE_SETUP
-#line 47 "toy.l"
+#line 48 "toy.l"
 {return OP;}
 	YY_BREAK
 case 30:
 YY_RULE_SETUP
-#line 48 "toy.l"
+#line 49 "toy.l"
 {return CP;}
 	YY_BREAK
 case 31:
 YY_RULE_SETUP
-#line 49 "toy.l"
+#line 50 "toy.l"
 {return ADD;}
 	YY_BREAK
 case 32:
 YY_RULE_SETUP
-#line 50 "toy.l"
+#line 51 "toy.l"
 {return SUB;}
 	YY_BREAK
 case 33:
 YY_RULE_SETUP
-#line 51 "toy.l"
+#line 52 "toy.l"
 {return DOT;}
 	YY_BREAK
 case 34:
 YY_RULE_SETUP
-#line 52 "toy.l"
+#line 53 "toy.l"
 {return COMMA;}
 	YY_BREAK
 case 35:
 YY_RULE_SETUP
-#line 53 "toy.l"
+#line 54 "toy.l"
 {return MUL;}
 	YY_BREAK
 case 36:
 YY_RULE_SETUP
-#line 54 "toy.l"
+#line 55 "toy.l"
 {return DIV;}
 	YY_BREAK
 case 37:
 YY_RULE_SETUP
-#line 55 "toy.l"
+#line 56 "toy.l"
 {return ASSIGN;}
 	YY_BREAK
 case 38:
 YY_RULE_SETUP
-#line 56 "toy.l"
+#line 57 "toy.l"
 {return LT;}
 	YY_BREAK
 case 39:
 YY_RULE_SETUP
-#line 57 "toy.l"
+#line 58 "toy.l"
 {return GT;}
 	YY_BREAK
 case 40:
 /* rule 40 can match eol */
 YY_RULE_SETUP
-#line 59 "toy.l"
-{return COMMENT;}
+#line 60 "toy.l"
+{}
 	YY_BREAK
 case 41:
 /* rule 41 can match eol */
 YY_RULE_SETUP
-#line 61 "toy.l"
+#line 62 "toy.l"
 { }
 	YY_BREAK
 case 42:
 YY_RULE_SETUP
-#line 66 "toy.l"
+#line 67 "toy.l"
 ECHO;
 	YY_BREAK
 #line 1009 "lex.yy.c"
@@ -2011,6 +2011,6 @@ void yyfree (void * ptr )
 
 #define YYTABLES_NAME "yytables"
 
-#line 66 "toy.l"
+#line 67 "toy.l"
 
 
