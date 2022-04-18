@@ -21,6 +21,8 @@
 
   int error = 1;
   int valid = 1;
+  char *fields;
+  char *dot;
 
 
 %} 
@@ -164,8 +166,8 @@ struct_ : STRUCT Name OB declaration CB { is_struct(1); new_scope(); if($4 == 1 
 ; 
 
 
-l_exp : ID  {  if(check_scope($1) == 1) { $$ = return_type($1);  } /* printf("found that this is of type: %d\n", $$->type);*/ } /* return type, if 0 then invalid */
-| ID DOT l_exp {printf("c\n");printf("checkiffield %d\n", check_if_field($1)); if (check_if_field($1) != 0) { $$=$3;  printf("found that this is of type: %d\n", $$->type); } else { printf("cant get it");$$ = NULL; }}
+l_exp : ID  { print_symbol_table(); fields = strdup($1); dot = strdup("."); printf("fields : %s\n", fields); if(check_scope($1) == 1) { $$ = return_type($1);  }  printf("found that this is of type: %d\n", $$->type); } /* return type, if 0 then invalid */
+| ID DOT l_exp { dot = strdup("."); printf("fields : %s\n", fields); strcat(dot, fields); strcat($1,dot); fields = strdup($1); printf("fields : %s\n", fields); if (check_if_field(fields) != 0) { printf("valid\n"); $$=$3; } else { printf("cant get it");$$ = NULL; }}
 ;
 
 
@@ -185,7 +187,7 @@ stmt : FOR_LOOP OP ID ASSIGN exp SEMICOLON exp SEMICOLON stmt CP stmt { delete_s
   | RETURN exp SEMICOLON  {ExpType* r = get_return_type_current_proc();  $$ = check_compatibility_dyn(r,$2, 1); }
   | OB stmt_seq CB { $$ = $2; }
   | ID OP declaration_check CP SEMICOLON { if (get_return_type_of_a_proc($1) == 1) {$$ = 1;}else{$$=0;} }
-  | type ID SEMICOLON {  if($1 == 0 || add_to_scope($1, $2) == 0) {  $$ = 0; } else {  $$ = 1; }  if($1 == 7) { add_struct_name();  add_struct_to_scope($2);  }}
+  | type ID SEMICOLON {  if($1 == 0 || add_to_scope($1, $2) == 0) {  $$ = 0; } else {  $$ = 1; }  if($1 == 7) { add_struct_name();  add_struct_to_scope($2);  struct_name = NULL;}}
   | l_exp ASSIGN exp SEMICOLON { if( check_compatibility_dyn($1, $3, 0) == 1 && ($1 != 0) ) { $$ = 1; } else { $$ = 0; }}
 ;
 

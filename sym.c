@@ -1,7 +1,6 @@
 #include <stdio.h>
 #include <string.h>
 
-
 #define SIZE 256;
 
 #define VARIABLES 1;
@@ -167,7 +166,7 @@ void *create_symbol_table()
   symbol_table->curr->is_struct = 0;
 }
 
-HashTable* create_hash_table()
+HashTable *create_hash_table()
 {
   HashTable *table = (HashTable *)malloc(sizeof(HashTable));
   table->size = SIZE;
@@ -340,11 +339,11 @@ void add_struct_name()
   }
 }
 
-ExpType* return_type(char *var)
+ExpType *return_type(char *var)
 {
-  //printf ("beginning my search for %s\n",var);
+  // printf ("beginning my search for %s\n",var);
   int index = hash_function(var);
-  ExpType* rettype = (ExpType *)malloc(sizeof(ExpType));
+  ExpType *rettype = (ExpType *)malloc(sizeof(ExpType));
   symbol *temp = symbol_table->curr;
   HashTable *table = temp->hash_table;
   if (temp->internal_scope == 1)
@@ -358,9 +357,10 @@ ExpType* return_type(char *var)
         item = table->items[index];
         if (item != NULL)
         {
-          //printf("\nfound the rettype: %d\n", item->type);
-          if (item->type==7){
-            //printf("\nfound the rettype name: %s\n", item->name_struct);
+          // printf("\nfound the rettype: %d\n", item->type);
+          if (item->type == 7)
+          {
+            // printf("\nfound the rettype name: %s\n", item->name_struct);
             rettype->sname = item->name_struct;
           }
           rettype->type = item->type;
@@ -378,26 +378,84 @@ ExpType* return_type(char *var)
     item = table->items[index];
     if (item != NULL)
     {
-      //printf("\nfound the rettype: %d\n", item->type);
-      if (item->type==7){
-        //printf("\nfound the rettype name: %s\n", item->name_struct);
-            rettype->sname = item->name_struct;
-          }
-          rettype->type = item->type;
-          return rettype;
+      // printf("\nfound the rettype: %d\n", item->type);
+      if (item->type == 7)
+      {
+        // printf("\nfound the rettype name: %s\n", item->name_struct);
+        rettype->sname = item->name_struct;
+      }
+      rettype->type = item->type;
+      return rettype;
     }
   }
   printf("\nnot found\n");
   return rettype;
 }
 
+// int check_if_field(char *stmt)
+// {
+//   char *token1 = strtok(stmt, ".");
+//   char *token2 = strtok(NULL, ".");
+
+//   printf("%s\n", token1);
+//   printf("%s\n", token2);
+
+//   if (check_scope(token1) != 0 && check_scope(token2) != 0)
+//   {
+//     printf("in scope\n");
+//     symbol *temp = symbol_table->curr;
+//     HashTable *table = temp->hash_table;
+//     int index = hash_function(token1);
+//     char* struct_name_ = table->items[index]->name_struct;
+
+//     while(struct_name_ != NULL)
+//     {
+//       symbol *temp_head = symbol_table->head;
+//       while (temp_head != NULL)
+//         {
+//           if ((strcmp(temp_head->name, struct_name_) == 0))
+//           {
+
+//           }
+//           temp = temp->next;
+//         }
+//     }
+//   }
+
+//     while(temp != NULL && table->items[index] != NULL)
+//     {
+//       printf("In struct %s\n", table->items[index]->name_struct);
+
+//       symbol *temp2 = symbol_table->head;
+//         while (temp2 != NULL)
+//         {
+//           if(table->items[index] == NULL){ break;}
+//           if ((strcmp(temp2->name, table->items[index]->name_struct) == 0))
+//           {
+//                 temp = temp2;
+//                 break;
+//           }
+//           else temp2 = temp2->next;
+//         }
+//       if(temp != NULL )table = temp->hash_table;
+//     }
+//     //int index = hash_function(token1);
+//   }
+//   else return 0;
+
+// }
+
 int check_if_field(char *stmt)
 {
   char *token1 = strtok(stmt, ".");
   char *token2 = strtok(NULL, ".");
 
+  printf("%s\n", token1);
+  printf("%s\n", token2);
+
   if (check_scope(token1) != 0 && check_scope(token2) != 0)
   {
+    printf("in scope\n");
     symbol *temp = symbol_table->curr;
     HashTable *table = temp->hash_table;
     int index = hash_function(token1);
@@ -415,32 +473,36 @@ int check_if_field(char *stmt)
         {
           if ((strcmp(temp->name, name_of_struct) == 0) && temp->is_struct == 1 && item->type == 7)
           {
+            printf("within struct %s\n", name_of_struct);
             table = temp->hash_table;
 
             index = hash_function(token2);
+            int index1 = hash_function(token1);
+            items *item1 = (items *)malloc(sizeof(items));
             items *item2 = (items *)malloc(sizeof(items));
             item2 = table->items[index];
+            item1 = table->items[index1];
             if (item2 != NULL)
             {
+              printf("within struct %s\n", name_of_struct);
               if (item2->type == 7)
               {
                 return 1;
               }
-              index = hash_function(token1);
-              items *item1 = (items *)malloc(sizeof(items));
-              item1 = table->items[index];
-              if (item1 != NULL && item2 != NULL)
+              else
               {
-                if (strcmp(item1->name_struct, item2->name_struct) == 0)
+                if (item2->name_struct != NULL)
                 {
-                  return 1;
+                  if (item2->type != 7 && (strcmp(item2->name_struct, item1->name_struct) == 0))
+                    return 1;
                 }
-                else
-                  return 0;
+                else if (item2->type != 7 && item2->name_struct == NULL){ return 1; }
+                else return 0;
               }
             }
-            else
+            else{
               return 0;
+            }
           }
           temp = temp->next;
         }
@@ -487,14 +549,14 @@ void store_return_type(int type)
   symbol_table->curr->return_type = type;
 }
 
-ExpType* get_return_type_current_proc()
+ExpType *get_return_type_current_proc()
 {
-  //printf("trying to get curr rettype\n");
-  ExpType* rettype = (ExpType *)malloc(sizeof(ExpType));
+  // printf("trying to get curr rettype\n");
+  ExpType *rettype = (ExpType *)malloc(sizeof(ExpType));
 
   rettype->type = symbol_table->curr->return_type;
   rettype->sname = symbol_table->curr->name;
-  printf ("the return type of the current proc is %d , %s \n",rettype->type,rettype->sname);
+  printf("the return type of the current proc is %d , %s \n", rettype->type, rettype->sname);
   return rettype;
 }
 
@@ -503,10 +565,10 @@ int get_return_type_of_a_proc(char *name)
   symbol *sym = symbol_table->head;
   while (sym != NULL)
   {
-    //printf("\n comparing %s with %s\n",name,sym->name);
+    // printf("\n comparing %s with %s\n",name,sym->name);
     if ((strcmp(sym->name, name) == 0) && sym->is_struct == 0)
     {
-      //printf("\n\nreturn type is %d\n",sym->return_type);
+      // printf("\n\nreturn type is %d\n",sym->return_type);
       return sym->return_type;
     }
     sym = sym->next;
@@ -518,7 +580,7 @@ int get_return_type_of_a_proc(char *name)
 int check_for_main()
 {
   symbol *sym = symbol_table->head;
-  char *main = (char*)malloc(sizeof(char));
+  char *main = (char *)malloc(sizeof(char));
   main = "main";
 
   while (sym != NULL)
