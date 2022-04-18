@@ -160,7 +160,7 @@ stmt : FOR_LOOP OP ID ASSIGN exp SEMICOLON exp SEMICOLON stmt CP stmt { delete_s
   | IF OP exp CP intern_scope_then stmt { delete_scope();  print($3); if(check_compatibility( 5, $3 )==1){printf("If statement exp is bool\n");}else{printf("If statement exp is NOT bool\n");} if($6 == 0) { $$ = 0; } else { $$ = 1; } }
   | IF OP exp CP intern_scope_then stmt intern_scope_else stmt { delete_scope(); if($6 == 0 || $8 == 0 || check_compatibility( 5, $3 )==0) { $$ = 0; } else { $$ = 1; } }
   | PRINTF OP exp CP SEMICOLON { $$ = check_compatibility(6,$3); }
-  | RETURN exp SEMICOLON  { $$ = 1; }
+  | RETURN exp SEMICOLON  { $$ = check_compatibility(get_return_type_current_proc(),$2); }
   | OB stmt_seq CB { $$ = $2; }
   | type ID SEMICOLON { /*printf("has returned with %d %s\n", $1, $2);*/ if($1 == 0 || add_to_scope($1, $2) == 0) {  $$ = 0; } else {  $$ = 1; }  if($1 == 7) { printf("hey hey \n"); printf("HEREEEEEEEEEEEEEE\n"); add_struct_name(); printf("finished adding a_struct"); add_struct_to_scope(strtok($2, ";"));  }}
   | l_exp ASSIGN exp SEMICOLON { /*printf("What are we returning %d\n", $1);*/ if( check_compatibility($1, $3) == 1 && ($1 != 0) ) { $$ = 1; } else { $$ = 0; }}
