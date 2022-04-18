@@ -512,3 +512,21 @@ int get_return_type_of_a_proc(char *name)
   printf("\ndid not find the proc\n");
   return -1;
 }
+
+int check_for_main()
+{
+  symbol *sym = symbol_table->head;
+  char *main = (char*)malloc(sizeof(char));
+  main = "main";
+  printf("in this function\n");
+  while (sym != NULL)
+  {
+      printf("Name: %s\n", sym->name);
+    if (sym->name != NULL && (strcmp(sym->name, main) == 0) && sym->is_struct == 0)
+    {
+      return 1;
+    }
+    sym = sym->next;
+  }
+  return 0;
+}

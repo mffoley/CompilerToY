@@ -83,3 +83,5 @@ void store_return_type(int type);
 ExpType* get_return_type_current_proc();
 
 int get_return_type_of_a_proc(char *name);
+
+int check_for_main();

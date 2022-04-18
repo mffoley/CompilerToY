@@ -68,7 +68,7 @@ input:	/* empty*/
 	;
 
 line: 
-	|pgm { print_symbol_table();}
+	|pgm { print_symbol_table(); if(check_for_main() == 1) { printf("Main exists\n"); }else {printf("Main does not exists\n"); }}
 	;
 
 pgm2: 
