@@ -36,5 +36,5 @@ int verify (Expression *node);
 ExpType* verify_dyn (Expression *node);
 
 int check_compatibility ( int type_expected, Expression *root );
-int check_compatibility_dyn ( ExpType *type_expected, Expression *root );
+int check_compatibility_dyn ( ExpType *type_expected, Expression *root , int overridesname);
 

@@ -3,10 +3,14 @@
    
 struct structure {
   // this is a comment in a struct
-  int j
+  bool j
+}
+struct structure2 {
+  // this is a comment in a struct
+  bool j
 }
 
-int h ( int g ) { 
+structure h ( int g ) { 
   //comment test
   for(; 5>7; g = 1;) 
   {
@@ -14,8 +18,9 @@ int h ( int g ) {
     //comment in for loop
   }
   structure a;
-  structure b;
-  return 1;
+  structure2 b;
+
+  return b ;
   //comment in proc
 }
 

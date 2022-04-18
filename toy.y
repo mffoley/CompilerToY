@@ -92,7 +92,7 @@ exp: /* nothing */ { $$ = NULL; }
   | string_literal                { $$ = add_expression(6,14,14,NULL,NULL,NULL); }
   | bool_literal                  { $$ = add_expression(5,14,14,NULL,NULL,NULL); }
   | ID OP declaration_check CP    { printf("\nthis proc returns type %d\n",get_return_type_of_a_proc($1));$$ = add_expression(get_return_type_of_a_proc($1),14,14,NULL,NULL,NULL); }
-  | ID                            { $$ = add_expression(return_type($1)->type,14,14,NULL,NULL,return_type($1)->sname); }
+  | ID                            { printf("expression eval \n");$$ = add_expression(return_type(strtok($1, " "))->type,14,14,NULL,NULL,return_type(strtok($1, " "))->sname); }
  ;
 
 int_literal: NUMBER {if($1 >= 32768 || $1 < -32768 ) {printf("too big int");$$ = 0;} else{$$ = 1;}} 
@@ -154,7 +154,7 @@ struct_ : STRUCT Name OB declaration CB { is_struct(1); new_scope(); if($4 == 1 
 ; 
 
 
-l_exp : ID  { printf("ORDER: %s\n", $1); if(check_scope(strtok($1, " =")) == 1) { /*int type_number = return_type(strtok($1, " ="))->type; if(type_number == 7) { $$ = 0;} else { printf("Type number : %d\n", type_number); $$ = type_number;} */ $$ = return_type(strtok($1, " =")); } else {$$ = NULL;} } /* return type, if 0 then invalid */
+l_exp : ID  { printf("ORDER: %s\n", $1); if(check_scope(strtok($1, " =")) == 1) { $$ = return_type(strtok($1, " =")); printf("name found = %s\n",$$->sname); } } /* return type, if 0 then invalid */
 | ID DOT l_exp { if (check_if_field($1) != 0) { $$=$3;} else { $$ = NULL; }}
 ;
 
@@ -172,10 +172,10 @@ stmt : FOR_LOOP OP ID ASSIGN exp SEMICOLON exp SEMICOLON stmt CP stmt { delete_s
   | IF OP exp CP intern_scope_then stmt { delete_scope();  print($3); if(check_compatibility( 5, $3 )==1){printf("If statement exp is bool\n");}else{printf("If statement exp is NOT bool\n");} if($6 == 0) { $$ = 0; } else { $$ = 1; } }
   | IF OP exp CP intern_scope_then stmt intern_scope_else stmt { delete_scope(); if($6 == 0 || $8 == 0 || check_compatibility( 5, $3 )==0) { $$ = 0; } else { $$ = 1; } }
   | PRINTF OP exp CP SEMICOLON { $$ = check_compatibility(6,$3); }
-  | RETURN exp SEMICOLON  { ExpType* r = get_return_type_current_proc(); printf("\nwtf is r %d %s\n",r->type,r->sname); $$ = check_compatibility_dyn(r,$2); }
+  | RETURN exp SEMICOLON  { ExpType* r = get_return_type_current_proc(); printf("\nr is %d %s\n",r->type,r->sname); $$ = check_compatibility_dyn(r,$2, 1); }
   | OB stmt_seq CB { $$ = $2; }
-  | type ID SEMICOLON {  if($1 == 0 || add_to_scope($1, $2) == 0) {  $$ = 0; } else {  $$ = 1; }  if($1 == 7) { printf("hey hey \n"); printf("HEREEEEEEEEEEEEEE\n"); add_struct_name(); printf("finished adding a_struct"); add_struct_to_scope(strtok($2, ";"));  }}
-  | l_exp ASSIGN exp SEMICOLON { if( check_compatibility_dyn($1, $3) == 1 && ($1 != 0) ) { $$ = 1; } else { $$ = 0; }}
+  | type ID SEMICOLON {  if($1 == 0 || add_to_scope($1, $2) == 0) {  $$ = 0; } else {  $$ = 1; }  if($1 == 7) { add_struct_name(); printf("finished adding a struct\n"); add_struct_to_scope(strtok($2, ";"));  }}
+  | l_exp ASSIGN exp SEMICOLON {printf("into the assignment\n");printf("\nlexp %d %s\n",$1->type,$1->sname); if( check_compatibility_dyn($1, $3, 0) == 1 && ($1 != 0) ) { $$ = 1; } else { $$ = 0; }}
 ;
 
 stmt_seq : /* empty */

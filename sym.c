@@ -342,6 +342,7 @@ void add_struct_name()
 
 ExpType* return_type(char *var)
 {
+  printf ("beginning my search for %s\n",var);
   int index = hash_function(var);
   ExpType* rettype = (ExpType *)malloc(sizeof(ExpType));
   symbol *temp = symbol_table->curr;
@@ -359,6 +360,7 @@ ExpType* return_type(char *var)
         {
           printf("\nfound the rettype: %d\n", item->type);
           if (item->type==7){
+            printf("\nfound the rettype name: %s\n", item->name_struct);
             rettype->sname = item->name_struct;
           }
           rettype->type = item->type;
@@ -378,6 +380,7 @@ ExpType* return_type(char *var)
     {
       printf("\nfound the rettype: %d\n", item->type);
       if (item->type==7){
+        printf("\nfound the rettype name: %s\n", item->name_struct);
             rettype->sname = item->name_struct;
           }
           rettype->type = item->type;

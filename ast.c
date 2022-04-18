@@ -273,15 +273,15 @@ int check_compatibility ( int type_expected, Expression *root ) {
   // use the verify command, get the return type of the tree root
 }
 
-int check_compatibility_dyn ( ExpType *type_expected, Expression *root ) {
+int check_compatibility_dyn ( ExpType *type_expected, Expression *root, int overridesname) {
   //printf("checking compatibility with type %d and expression (return type evaluated to be %d)\nVerifying:\n", type_expected, verify(root));
   //print(root);
   printf ("\ndynamic compatibility checking \n");
   ExpType* ret = (ExpType *)malloc(sizeof(ExpType));
   ret = verify_dyn(root);
-  printf ("\nActual type is: %d \n",ret->type);
-  printf ("\nExpected type is: %d \n",type_expected->type);
-  if ( (ret->type == type_expected->type ) && ((type_expected->type == 7 && strcmp( type_expected->sname, ret->sname) == 0) || type_expected->type != 7)){
+  printf ("\nActual type is: %d , %s \n",ret->type,ret->sname);
+  printf ("\nExpected type is: %d , %s\n",type_expected->type, type_expected->sname);
+  if ( (ret->type == type_expected->type ) && ((type_expected->type == 7 && (strcmp( type_expected->sname, ret->sname) == 0 || overridesname == 1)) || type_expected->type != 7)){
     return 1;
   }
   return 0;
