@@ -1,0 +1,7 @@
+
+//valid, demonstrates a boolean expression
+
+void main ( int x ) { 
+    bool g;
+    g = expres();
+}

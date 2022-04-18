@@ -130,6 +130,8 @@ binary_boolean_op_r: LTE {$$ = 1;}
   | GTE {$$ = 1;} 
   | LT {$$ = 1;} 
   | GT {$$ = 1;} 
+  | OR {$$ = 1;} 
+  | AND {$$ = 1;} 
   ;
 
 binary_boolean_op_nr: EQU {$$ = 1;} 
@@ -203,7 +205,7 @@ proc : return_type Name OP declaration CP OB stmt_seq CB {new_scope(); if($4 == 
 {
     extern FILE *yyin, yyout;
     
-    yyin = fopen("Test6VALID.txt", "r");
+    yyin = fopen("Test7VALID.txt", "r");
 
     int parse = yyparse();
     printf("valid: %d\nerror: %d\n", valid, error);
