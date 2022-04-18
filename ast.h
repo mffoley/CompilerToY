@@ -8,7 +8,13 @@ typedef struct Expression {
   int exp_type;
   struct Expression *lexp;
   struct Expression *rexp;
+  char *sname;
 } Expression;
+
+typedef struct ExpType {
+  int type;
+  char *sname;
+} ExpType;
 
 
 //Use check_scope sym table for types
@@ -23,9 +29,12 @@ typedef struct Expression {
 
 // Assignment not handled in here
 
-Expression* add_expression (int type, int op, int exp, Expression *lexp, Expression *rexp);
+Expression* add_expression (int type, int op, int exp, Expression *lexp, Expression *rexp, char *sname);
 void print (Expression *node);
 void printtree (int indent, Expression *exp);
 int verify (Expression *node);
+ExpType* verify_dyn (Expression *node);
 
 int check_compatibility ( int type_expected, Expression *root );
+int check_compatibility_dyn ( ExpType *type_expected, Expression *root );
+

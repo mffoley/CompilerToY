@@ -8,15 +8,15 @@ struct structure {
 
 int h ( int g ) { 
   //comment test
-  for(g=0; 5>7; g = 1;) 
+  for(; 5>7; g = 1;) 
   {
     printf("hey"); //end of line comment
     //comment in for loop
   }
+  structure a;
+  structure b;
+  return 1;
   //comment in proc
 }
 
-int b (int l) {
-  int y;
-  y = h (4);
-}
+//eof comment

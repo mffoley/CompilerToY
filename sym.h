@@ -41,6 +41,7 @@ typedef struct table
   symbol *curr;
 }table;
 
+
 int add_to_scope(int type, char *n);
 
 int is_struct(int integer);
@@ -71,7 +72,7 @@ void store_struct_name(char *name);
 
 void add_struct_name();
 
-int return_type(char *var);
+ExpType* return_type(char *var);
 
 int check_if_field(char *stmt);
 
@@ -79,6 +80,6 @@ add_struct(char *name);
 
 void store_return_type(int type);
 
-int get_return_type_current_proc();
+ExpType* get_return_type_current_proc();
 
 int get_return_type_of_a_proc(char *name);

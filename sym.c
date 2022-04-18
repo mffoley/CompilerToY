@@ -340,9 +340,10 @@ void add_struct_name()
   }
 }
 
-int return_type(char *var)
+ExpType* return_type(char *var)
 {
   int index = hash_function(var);
+  ExpType* rettype = (ExpType *)malloc(sizeof(ExpType));
   symbol *temp = symbol_table->curr;
   HashTable *table = temp->hash_table;
   if (temp->internal_scope == 1)
@@ -356,7 +357,11 @@ int return_type(char *var)
         item = table->items[index];
         if (item != NULL)
         {
-          return item->type;
+          if (item->type==7){
+            rettype->sname = item->name_struct;
+          }
+          rettype->type = item->type;
+          return rettype;
         }
       }
       temp = temp->prev;
@@ -370,7 +375,11 @@ int return_type(char *var)
     item = table->items[index];
     if (item != NULL)
     {
-      return item->type;
+      if (item->type==7){
+            rettype->sname = item->name_struct;
+          }
+          rettype->type = item->type;
+          return rettype;
     }
   }
   return 0;
@@ -472,9 +481,12 @@ void store_return_type(int type)
   symbol_table->curr->return_type = type;
 }
 
-int get_return_type_current_proc()
+ExpType* get_return_type_current_proc()
 {
-  return symbol_table->curr->return_type;
+  ExpType* rettype = (ExpType *)malloc(sizeof(ExpType));
+  rettype->type = symbol_table->curr->return_type;
+  rettype->sname = symbol_table->curr->name;
+  return rettype;
 }
 
 int get_return_type_of_a_proc(char *name)
