@@ -1,11 +1,11 @@
-struct structure {
-  bool j
-}
+//valid
 
-string h ( int g ) {
-  bool i ;
+struct structure {
+  string i
+}
+string main ( int g , string j ) {
   structure s;
   string k;
-  k = h ( s );
-  return k ;
+  k = j;
+  return k;
 }

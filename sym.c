@@ -253,7 +253,7 @@ int add_struct_to_scope(char *field)
 
   while (temp != NULL)
   {
-    if ((temp->is_struct == 1))
+    if (temp->is_struct == 1)
     {
       if (temp->name != NULL && struct_name != NULL)
       {
@@ -342,7 +342,7 @@ void add_struct_name()
 
 ExpType* return_type(char *var)
 {
-  printf ("beginning my search for %s\n",var);
+  //printf ("beginning my search for %s\n",var);
   int index = hash_function(var);
   ExpType* rettype = (ExpType *)malloc(sizeof(ExpType));
   symbol *temp = symbol_table->curr;
@@ -358,9 +358,9 @@ ExpType* return_type(char *var)
         item = table->items[index];
         if (item != NULL)
         {
-          printf("\nfound the rettype: %d\n", item->type);
+          //printf("\nfound the rettype: %d\n", item->type);
           if (item->type==7){
-            printf("\nfound the rettype name: %s\n", item->name_struct);
+            //printf("\nfound the rettype name: %s\n", item->name_struct);
             rettype->sname = item->name_struct;
           }
           rettype->type = item->type;
@@ -378,16 +378,17 @@ ExpType* return_type(char *var)
     item = table->items[index];
     if (item != NULL)
     {
-      printf("\nfound the rettype: %d\n", item->type);
+      //printf("\nfound the rettype: %d\n", item->type);
       if (item->type==7){
-        printf("\nfound the rettype name: %s\n", item->name_struct);
+        //printf("\nfound the rettype name: %s\n", item->name_struct);
             rettype->sname = item->name_struct;
           }
           rettype->type = item->type;
           return rettype;
     }
   }
-  return 0;
+  printf("\nnot found\n");
+  return rettype;
 }
 
 int check_if_field(char *stmt)
@@ -488,12 +489,12 @@ void store_return_type(int type)
 
 ExpType* get_return_type_current_proc()
 {
-  printf("trying to get curr rettype\n");
+  //printf("trying to get curr rettype\n");
   ExpType* rettype = (ExpType *)malloc(sizeof(ExpType));
 
   rettype->type = symbol_table->curr->return_type;
   rettype->sname = symbol_table->curr->name;
-  printf ("the expression type of the current proc is %d , %s \n",rettype->type,rettype->sname);
+  printf ("the return type of the current proc is %d , %s \n",rettype->type,rettype->sname);
   return rettype;
 }
 
@@ -502,9 +503,10 @@ int get_return_type_of_a_proc(char *name)
   symbol *sym = symbol_table->head;
   while (sym != NULL)
   {
+    //printf("\n comparing %s with %s\n",name,sym->name);
     if ((strcmp(sym->name, name) == 0) && sym->is_struct == 0)
     {
-      printf("\n\nreturn type is %d\n",sym->return_type);
+      //printf("\n\nreturn type is %d\n",sym->return_type);
       return sym->return_type;
     }
     sym = sym->next;

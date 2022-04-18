@@ -26,7 +26,7 @@
 "mod"     {return MOD;}
 "return"  {return RETURN;}
 
-[_a-zA-Z][_a-zA-Z0-9]* {yylval.str = yytext; return ID;}
+[_a-zA-Z][_a-zA-Z0-9]* {yylval.str = strdup(yytext); return ID;}
 
 
 

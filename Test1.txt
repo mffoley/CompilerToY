@@ -1,16 +1,16 @@
 
-//comment outside of proc
+//valid
    
 struct structure {
   // this is a comment in a struct
-  bool j
+  int j
 }
 struct structure2 {
   // this is a comment in a struct
-  bool j
+  int j
 }
 
-structure h ( int g ) { 
+int main ( int g ) { 
   //comment test
   for(; 5>7; g = 1;) 
   {
@@ -18,9 +18,11 @@ structure h ( int g ) {
     //comment in for loop
   }
   structure a;
-  structure2 b;
+  structure b;
+  a = b;
+  g = main(g);
 
-  return b ;
+  return g ;
   //comment in proc
 }
 

@@ -25,7 +25,7 @@ int NEXP = 14;  // Not an op
 
 
 Expression* add_expression (int type, int op, int exp, Expression *lexp, Expression *rexp, char *sname) {
-  //printf("adding\n");
+  //printf("adding %d\n",type);
   Expression* next_expression = (Expression *)malloc(sizeof(Expression));
   next_expression->evaluates_to_type = type;
   next_expression->exp_type = exp;
@@ -215,14 +215,14 @@ ExpType* verify_dyn (Expression *node) {
       }
       else if (node->op == COMP_OP_R)
       {
-        if (left_verif->type == right_verif->type && (right_verif->type == INT_TYPE || right_verif->type == BOOL_TYPE || left_verif->type == STRING_TYPE )){
+        if (left_verif->type == right_verif->type && (right_verif->type == INT_TYPE || right_verif->type == BOOL_TYPE || left_verif->type == STRING_TYPE || right_verif->type == VAR_STRUCT)){
           return ret;
           //printf("Left and right of restrictive comparison evaluate to same, returning %d\n",node->evaluates_to_type);
         }
       }
       else if (node->op == COMP_OP_NR)
       {
-        if ((right_verif->type  == INT_TYPE|| right_verif->type == BOOL_TYPE || right_verif->type == STRING_TYPE) && (left_verif->type == INT_TYPE || left_verif->type == BOOL_TYPE || left_verif->type == STRING_TYPE)){
+        if ((right_verif->type  == INT_TYPE|| right_verif->type == BOOL_TYPE || right_verif->type == STRING_TYPE || right_verif->type == VAR_STRUCT) && (left_verif->type == INT_TYPE || left_verif->type == BOOL_TYPE || left_verif->type == STRING_TYPE || left_verif->type == VAR_STRUCT)){
           return ret;
         }
       }
@@ -274,18 +274,17 @@ int check_compatibility ( int type_expected, Expression *root ) {
 }
 
 int check_compatibility_dyn ( ExpType *type_expected, Expression *root, int overridesname) {
-  printf("checking compatibility with type %d and expression (return type evaluated to be %d)\nVerifying:\n", type_expected->type, verify_dyn(root)->type);
-  print(root);
-  //printf ("\ndynamic compatibility checking \n");
-  ExpType* ret = (ExpType *)malloc(sizeof(ExpType));
-  ret = verify_dyn(root);
-  //printf ("\nActual type is: %d , %s \n",ret->type,ret->sname);
-  //printf ("\nExpected type is: %d , %s\n",type_expected->type, type_expected->sname);
-  if ( (ret->type == type_expected->type ) && ((type_expected->type == 7 && (strcmp( type_expected->sname, ret->sname) == 0 || overridesname == 1)) || type_expected->type != 7)){
-    printf("returning 1\n");
+  int type = verify_dyn(root)->type;
+  //printf("checking compatibility with type %d and expression (return type evaluated to be %d)\nVerifying:\n", type, verify_dyn(root)->type);
+  
+  char *name = verify_dyn(root)->sname;
+  //printf ("Actual type is: %d , %s \n",type,name);
+  printf ("Expected type is: %d , %s\n",type_expected->type, type_expected->sname);
+  if ( (type == type_expected->type ) && ((type == 7 && (overridesname == 1 || (name != NULL && strcmp( type_expected->sname, name)== 0) )) || type != 7)){
+    //printf("returning 1\n");
     return 1;
   }
-  printf("returning 0\n");
+  printf("returning 0 for compatibility\n");
   return 0;
   // use the verify command, get the return type of the tree root
 }
