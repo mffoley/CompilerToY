@@ -518,10 +518,9 @@ int check_for_main()
   symbol *sym = symbol_table->head;
   char *main = (char*)malloc(sizeof(char));
   main = "main";
-  printf("in this function\n");
+
   while (sym != NULL)
   {
-      printf("Name: %s\n", sym->name);
     if (sym->name != NULL && (strcmp(sym->name, main) == 0) && sym->is_struct == 0)
     {
       return 1;

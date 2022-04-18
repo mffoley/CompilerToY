@@ -19,6 +19,9 @@
     return 0;
   }
 
+  int error = 1;
+  int valid = 1;
+
 
 %} 
 
@@ -54,6 +57,11 @@
 %type <val> unary_maths_op;
 %type <val> unary_boolean_op;
 %type <val> return_type;
+%type <val> pgm;
+%type <val> pgm2;
+%type <val> line;
+%type <val> input;
+
 
 %type <expression> exp;
 
@@ -63,21 +71,21 @@
 
 
 %%
-input:	/* empty*/
-	|input line {}
+input:  { $$ = 1; }	/* empty*/
+	|input line {if(($1 == 1) && ($2 == 1)) { valid = 1; $$ = 1; } else{ valid = 0; $$ = 0; }}
 	;
 
 line: 
-	|pgm { print_symbol_table(); if(check_for_main() == 1) { printf("Main exists\n"); }else {printf("Main does not exists\n"); }}
+	|pgm { if(check_for_main() == 1 && ($1 == 1)) { $$ = 1; }else { $$ = 0; }}
 	;
 
 pgm2: 
-| proc pgm2 { if($1 == 1){printf("-----------------------------Valid Proc\n");} else {printf("-----------------------------Invalid Proc\n"); }}
-| struct_ pgm2 { if($1 == 1){printf("-----------------------------Valid Struct\n");} else {printf("-----------------------------Invalid Struct\n"); }}
+| proc pgm2 { if(($1 == 1) && ($2 == 1)){ $$=1; } else { $$=0; }}
+| struct_ pgm2 { if(($1 == 1) && ($2 == 1)){ $$=1; } else { $$=0; }}
 ;
 
-pgm: proc pgm2 { if($1 == 1){printf("-----------------------------Valid Proc\n");} else {printf("-----------------------------Invalid Proc\n"); } }
-| struct_ pgm { if($1 == 1){printf("-----------------------------Valid Struct\n");} else {printf("-----------------------------Invalid Struct\n"); } }
+pgm: proc pgm2 { if(($1 == 1) && ($2 == 1)){ $$=1; } else { $$=0; } }
+| struct_ pgm { if(($1 == 1) && ($2 == 1)){ $$=1; } else { $$=0; } }
 ;
 
 
@@ -197,11 +205,11 @@ proc : return_type Name OP declaration CP OB stmt_seq CB {new_scope(); if($4 == 
     yyin = fopen("Test3.txt", "r");
 
     int parse = yyparse();
-    // if(parse == 0) printf ("Error\n");
-    // else printf("Valid");
+
+    if(valid == 0 || error == 0) printf ("Error\n");
+    else printf("Valid\n");
 }
 
 int yyerror(const char *msg){
-  fprintf(stderr, "%s\n", msg);
-  return 0;
+  error = 0;
 }
